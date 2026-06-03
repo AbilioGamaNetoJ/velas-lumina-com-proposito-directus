@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, ShoppingBag, Flame, Clock, Ruler, Scale, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
 import { Product } from '@/types/types';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
@@ -16,8 +16,17 @@ interface ProductDetailModalProps {
 
 export default function ProductDetailModal({ product, onClose, onAddToCart }: ProductDetailModalProps) {
   const [activeCareTab, setActiveCareTab] = useState<string | null>('queima');
+  const [activeImage, setActiveImage] = useState<string>('');
+
+  useEffect(() => {
+    if (product) {
+      setActiveImage(product.image);
+    }
+  }, [product]);
 
   if (!product) return null;
+
+  const allImages = [product.image, ...(product.gallery || [])];
 
   // Pre-fill a beautifully formatted message for custom whatsapp redirects if desired
   const whatsappUrl = buildWhatsAppURL({ productName: product.name, price: product.price });
@@ -55,7 +64,7 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
           {/* Modal Container */}
           <div 
-            className="inline-block align-middle bg-warm-bg rounded-3xl text-left overflow-hidden shadow-2xl transform my-8 sm:max-w-4xl w-full border border-high-blush/40 animate-scale-in"
+            className="relative z-10 inline-block align-middle bg-warm-bg rounded-3xl text-left overflow-hidden shadow-2xl transform my-8 sm:max-w-4xl w-full border border-high-blush/40 animate-scale-in"
           >
             {/* Close button top right */}
             <button
@@ -68,20 +77,39 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
             <div className="grid grid-cols-1 md:grid-cols-2">
               
-              {/* Left Column: Image with overlay banner */}
-              <div className="relative aspect-square md:aspect-auto md:h-full min-h-[350px] bg-soft-blush">
-                <img 
-                  src={product.image} 
-                  alt={product.name} 
-                  id="modal-product-img"
-                  className="w-full h-full object-cover"
-                />
+              {/* Left Column: Gallery & Main Image */}
+              <div className="relative md:h-full min-h-[350px] bg-soft-blush flex flex-col md:flex-row">
                 
-                {/* Visual flower-watercolor accent look */}
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-brown/40 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-6 left-6 text-left text-white hidden md:block">
-                  <p className="font-editorial text-2xl font-bold">{product.name}</p>
-                  <p className="text-white/80 text-xs">{product.subtitle}</p>
+                {/* Thumbnails (Desktop: vertical left, Mobile: horizontal bottom) */}
+                {allImages.length > 1 && (
+                  <div className="flex md:flex-col gap-2 p-3 md:p-4 w-full md:w-24 md:h-full overflow-x-auto md:overflow-y-auto order-2 md:order-1 bg-white/50 backdrop-blur-sm z-20">
+                    {allImages.map((imgUrl, idx) => (
+                      <button 
+                        key={idx}
+                        onClick={() => setActiveImage(imgUrl)}
+                        className={`relative shrink-0 w-16 h-16 md:w-full md:h-20 rounded-lg overflow-hidden border-2 transition-all ${activeImage === imgUrl ? 'border-primary shadow-md opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                      >
+                        <img src={imgUrl} alt={`${product.name} miniatura ${idx + 1}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Main Image */}
+                <div className="relative flex-1 aspect-square md:aspect-auto order-1 md:order-2">
+                  <img 
+                    src={activeImage} 
+                    alt={product.name} 
+                    id="modal-product-img"
+                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                  />
+                  
+                  {/* Visual flower-watercolor accent look */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark-brown/40 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-6 left-6 text-left text-white hidden md:block">
+                    <p className="font-editorial text-2xl font-bold">{product.name}</p>
+                    <p className="text-white/80 text-xs">{product.subtitle}</p>
+                  </div>
                 </div>
               </div>
 

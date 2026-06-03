@@ -39,12 +39,19 @@ export const productType = defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Imagem',
+      title: 'Imagem (Capa)',
       type: 'image',
       options: {
         hotspot: true,
       },
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Galeria de Imagens (Miniaturas)',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
+      description: 'Adicione fotos extras do produto. Elas aparecerão como miniaturas no modal.',
     }),
     defineField({
       name: 'category',

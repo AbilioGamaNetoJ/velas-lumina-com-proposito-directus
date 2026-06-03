@@ -8,7 +8,8 @@
     "build": "next build",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "start": "next start -p 3001",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import": "npx tsx --env-file=.env.local scripts/import.ts"
   },
   "dependencies": {
     "@sanity/client": "^7.22.1",
@@ -18,12 +19,12 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.546.0",
-    "next": "^15.5.19",
+    "next": "^16.2.7",
     "next-sanity": "^13.0.10",
     "next-sitemap": "^4.2.3",
     "postcss": "^8.5.15",
-    "react": "^19.0.1",
-    "react-dom": "^19.0.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "sanity": "^5.30.0",
     "styled-components": "^6.4.2"
   },

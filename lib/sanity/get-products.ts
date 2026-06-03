@@ -18,6 +18,7 @@ export async function getProducts(): Promise<Product[]> {
       scents,
       price,
       "image": image.asset->url,
+      "gallery": gallery[].asset->url,
       category,
       featured,
       details {

@@ -11,6 +11,7 @@ export interface Product {
   scents: string[];
   price: number;
   image: string;
+  gallery?: string[];
   category: 'velas' | 'cestas' | 'kits';
   details?: {
     weight?: string;
