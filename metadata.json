@@ -1,0 +1,6 @@
+{
+  "name": "Lumina Velas Artesanais",
+  "description": "Vitrine elegante de velas decorativas e personalizadas feitas à mão com ceras vegetais e essências naturais.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
