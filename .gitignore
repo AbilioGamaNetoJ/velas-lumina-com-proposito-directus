@@ -1,8 +1,52 @@
+# Dependências
 node_modules/
+/.pnp
+.pnp.js
+
+# Next.js
+/.next/
+/out/
 build/
 dist/
-coverage/
-.DS_Store
+
+# Next.js build cache
+.swc/
+.next/cache/
+
+# Ambientes (Nunca enviar chaves de API/Senhas)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Sanity
+/sanity/dist/
+/sanity/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 *.log
-.env*
-!.env.example
+
+# Vercel
+.vercel
+
+# Arquivos de Sistema
+.DS_Store
+*.pem
+Thumbs.db
+
+# Testes e Cobertura
+coverage/
+.nyc_output
+
+# Extensões e ferramentas de dev locais
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.gemini/
