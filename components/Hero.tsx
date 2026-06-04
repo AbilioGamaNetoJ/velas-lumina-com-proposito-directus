@@ -82,14 +82,14 @@ export default function Hero({ onExplore }: HeroProps) {
             <div className="absolute inset-x-0 top-0 bottom-0 scale-[1.08] border border-primary/10 rounded-full animate-pulse" style={{ animationDuration: '4s' }} />
             <div className="absolute inset-0 scale-[1.03] border-2 border-primary/5 rounded-full pointer-events-none" />
 
-            <div className="w-full max-w-[420px] sm:max-w-[480px] aspect-square rounded-full overflow-hidden shadow-2xl shadow-primary/10 border-4 border-white transform hover:scale-[1.01] transition-transform duration-500">
+            <div className="w-full max-w-[460px] sm:max-w-[530px] aspect-square rounded-full overflow-hidden shadow-[0_0_60px_25px_rgba(0,0,0,0.18)] border-4 border-white transform hover:scale-[1.01] transition-transform duration-500">
               <video
                 src="/images/gif-lumina.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-[center_70%]"
               />
             </div>
           </div>
