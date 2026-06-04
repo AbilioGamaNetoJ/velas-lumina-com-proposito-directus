@@ -186,3 +186,22 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
+export const CUSTOMIZER_CONTAINERS = [
+  { id: 'c1', name: 'Vidro Clássico', desc: 'Pote transparente tradicional com tampa de cortiça.', price: 15.0 },
+  { id: 'c2', name: 'Cerâmica Rústica', desc: 'Artesanal, feita à mão, ideal para uma estética acolhedora.', price: 35.0 },
+  { id: 'c3', name: 'Lata Minimalista', desc: 'Lata premium, perfeita para presentear.', price: 10.0 }
+];
+
+export const CUSTOMIZER_SCENTS = [
+  { id: 's1', name: 'Lavanda Francesa', desc: 'Calma e tranquilidade. Floral aromático.' },
+  { id: 's2', name: 'Flor de Laranjeira', desc: 'Aroma fresco, cítrico e elegante.' },
+  { id: 's3', name: 'Rosas Silvestres', desc: 'Romântico e intenso com um fundo marcante.' },
+  { id: 's4', name: 'Baunilha Rústica', desc: 'Doce e aconchegante, o clássico perfeito.' }
+];
+
+export const CUSTOMIZER_FLOWERS = [
+  { id: 'f1', name: 'Sem Decoração', desc: 'Superfície lisa e minimalista.' },
+  { id: 'f2', name: 'Pétalas de Rosa', desc: 'Pétalas secas delicadas espalhadas pelo topo.' },
+  { id: 'f3', name: 'Raminhos de Lavanda', desc: 'Flores secas trazendo um ar campestre.' },
+  { id: 'f4', name: 'Mix Botânico', desc: 'Uma mistura charmosa de flores da estação.' }
+];
