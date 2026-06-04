@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import { Sparkles } from 'lucide-react';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -29,17 +28,6 @@ export default function MobileMenu({ isOpen, onClose, onGoToSection, navItems }:
             {item.label}
           </button>
         ))}
-        <button
-          id="mobile-customize-btn"
-          onClick={() => {
-            onClose();
-            onGoToSection?.('customizer');
-          }}
-          className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-xl font-semibold tracking-wider uppercase text-sm mt-2 transition-all"
-        >
-          <Sparkles className="w-4 h-4" />
-          Personalizar Vela
-        </button>
       </div>
     </div>
   );

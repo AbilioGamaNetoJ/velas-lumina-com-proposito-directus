@@ -24,14 +24,7 @@ export interface Product {
 
 export interface CartItem {
   id: string;
-  product?: Product;
-  isBespoke?: boolean;
-  bespokeDetails?: {
-    container: string;
-    scent: string;
-    flowers: string;
-    customLabel: string;
-  };
+  product: Product;
   quantity: number;
   priceAtAddition: number;
 }

@@ -186,21 +186,3 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
-export const CUSTOMIZER_CONTAINERS = [
-  { id: 'ceramica-rustica', name: 'Cerâmica Rústica Feita à Mão', price: 25, desc: 'Pote de barro rústico escavado.' },
-  { id: 'vidro-de-conserva', name: 'Vidro Amber com Tampa de Rolha', price: 15, desc: 'Look vintage acolhedor.' },
-  { id: 'casca-coco-natural', name: 'Casca de Coco Natural Tratada', price: 20, desc: 'Básico fofo e sustentável.' }
-];
-
-export const CUSTOMIZER_SCENTS = [
-  { id: 'lavanda-francesa', name: 'Lavanda Francesa Seca', desc: 'Relaxamento e calmaria para noites tranquilas.' },
-  { id: 'baunilha-madagascar', name: 'Baunilha de Madagascar', desc: 'Doçura quente e reconfortante.' },
-  { id: 'canela-fresca', name: 'Canela e Especiarias', desc: 'Afrodisíaco rústico e estimulante.' },
-  { id: 'rosas-jasmim', name: 'Bouquet de Rosas e Jasmim', desc: 'Florido, romântico e sofisticado.' }
-];
-
-export const CUSTOMIZER_FLOWERS = [
-  { id: 'margarida-amarela', name: 'Margaridas Inteiras Amarelas', desc: 'Lindo acabamento ensolarado.' },
-  { id: 'rosas-desidratadas', name: 'Pétalas de Rosas Escarlates', desc: 'Vermelho imponente romântico.' },
-  { id: 'lavanda-flores', name: 'Brotos Azuis de Lavanda', desc: 'Visual lavandário rústico e místico.' }
-];

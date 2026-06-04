@@ -63,7 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   };
 
   return (
-    <div className="bg-warm-bg min-h-screen flex flex-col font-sans select-none antialiased pt-20">
+    <div className="bg-warm-bg min-h-screen flex flex-col font-sans antialiased pt-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

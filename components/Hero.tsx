@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Flame } from 'lucide-react';
 
 interface HeroProps {
   onExplore: () => void;
@@ -24,8 +24,8 @@ export default function Hero({ onExplore }: HeroProps) {
           {/* Text block */}
           <div className="flex flex-col items-start text-left space-y-6 max-w-xl animate-fade-up">
             <div className="inline-flex items-center gap-2 bg-high-blush/60 border border-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase">
-              <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '6s' }} />
-              Artesanal &amp; Botânica
+              <Flame className="w-3.5 h-3.5" />
+              Feita com intenção
             </div>
 
             <h1 className="font-editorial text-4xl sm:text-5xl lg:text-5xl font-bold text-dark-brown leading-[1.05] tracking-tight">
@@ -47,14 +47,14 @@ export default function Hero({ onExplore }: HeroProps) {
               </button>
               
               <a
-                href="#customizer"
+                href="#como-funciona"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById('customizer')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' });
                 }}
                 className="inline-flex items-center justify-center gap-2 border border-primary/20 hover:border-primary text-primary hover:bg-primary/5 font-medium text-sm tracking-wider uppercase px-8 py-4 rounded-xl transition-all duration-300 cursor-pointer"
               >
-                Atelier Sob Encomenda
+                Como funciona?
               </a>
             </div>
 
@@ -83,11 +83,13 @@ export default function Hero({ onExplore }: HeroProps) {
             <div className="absolute inset-0 scale-[1.03] border-2 border-primary/5 rounded-full pointer-events-none" />
 
             <div className="w-full max-w-[420px] sm:max-w-[480px] aspect-square rounded-full overflow-hidden shadow-2xl shadow-primary/10 border-4 border-white transform hover:scale-[1.01] transition-transform duration-500">
-              <img 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkavutug-uwUEk8DM837B3jA082LlDXqCWs8UxTBsEQtq2Ag8lToXd3MXV86pAnEqlxobh-bWyoEL482ixIj_o3BRuDfz3dVPhYRZG3cTMCDf4mhaK4yBTMONCmvbKRATfc60Ps3pvajEW2Jgzfc5I40UpCv-gNYGG16uy7socV8RoUEOe547mhK8q-xFJ1YeM4W5Fgc60hMWI9KNsobfKdaUQi3rgZiGf2PBlJalbnHKWgc7IaNSxYZNkLPcO8OCuVKUaIY1aI5c" 
-                alt="Velas artesanais decorativas florais em chamas" 
-                id="hero-img"
-                className="w-full h-full object-cover rounded-full"
+              <video
+                src="/images/gif-lumina.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
               />
             </div>
           </div>

@@ -8,15 +8,15 @@
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import About from '@/components/About';
+import FeaturedSection from '@/components/FeaturedSection';
 import ProductCard from '@/components/ProductCard';
 import ProductDetailModal from '@/components/ProductDetailModal';
-import Customizer from '@/components/Customizer';
+import HowItWorks from '@/components/HowItWorks';
 import ProductCarousel from '@/components/ProductCarousel';
 import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
 import { Product, CartItem } from '@/types/types';
-import { Search, SlidersHorizontal, Sparkles, AlertCircle, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Search, SlidersHorizontal, AlertCircle, ShoppingBag, ArrowRight } from 'lucide-react';
 
 export default function HomeClient({ products }: { products: Product[] }) {
   // Navigation & Drawer states
@@ -65,46 +65,23 @@ export default function HomeClient({ products }: { products: Product[] }) {
   // Cart operations
   const handleAddToCart = (product: Product) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => !item.isBespoke && item.product?.id === product.id);
+      const existing = prev.find((item) => item.product?.id === product.id);
       if (existing) {
-        return prev.map((item) => 
-          (!item.isBespoke && item.product?.id === product.id) 
-            ? { ...item, quantity: item.quantity + 1 } 
+        return prev.map((item) =>
+          item.product?.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
       return [...prev, {
         id: `standard-${product.id}-${Date.now()}`,
         product,
-        isBespoke: false,
         quantity: 1,
         priceAtAddition: product.price
       }];
     });
     
     // Auto-open shopping slide to confirm insertion feedback
-    setIsCartOpen(true);
-  };
-
-  const handleAddBespoke = (bespoke: {
-    container: string;
-    scent: string;
-    flowers: string;
-    customLabel: string;
-    price: number;
-  }) => {
-    setCartItems((prev) => [
-      ...prev,
-      {
-        id: `bespoke-${Date.now()}`,
-        isBespoke: true,
-        bespokeDetails: bespoke,
-        quantity: 1,
-        priceAtAddition: bespoke.price
-      }
-    ]);
-    
-    // Instantly slide cart open to show addition
     setIsCartOpen(true);
   };
 
@@ -148,8 +125,12 @@ export default function HomeClient({ products }: { products: Product[] }) {
         {/* Hero Section */}
         <Hero onExplore={() => handleGoToSection('produtos')} />
 
-        {/* Storytelling About section */}
-        <About />
+        {/* Dynamic Featured Section (Sanity 'featured: true') */}
+        <FeaturedSection 
+          featuredProducts={products.filter(p => p.featured)} 
+          onSelectProduct={setSelectedProduct} 
+          onAddToCart={handleAddToCart} 
+        />
 
         {/* Collection Section */}
         <section id="produtos" className="py-20 bg-white relative">
@@ -242,8 +223,7 @@ export default function HomeClient({ products }: { products: Product[] }) {
 
         </section>
 
-        {/* Interactive Bespoke Lab Customizer */}
-        <Customizer onAddBespoke={handleAddBespoke} />
+        <HowItWorks />
 
       </main>
 

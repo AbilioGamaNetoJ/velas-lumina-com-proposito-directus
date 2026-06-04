@@ -6,7 +6,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ShoppingBag, Menu, X, Sparkles, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Menu, X, MessageCircle } from 'lucide-react';
 import MobileMenu from './MobileMenu';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
 
@@ -23,7 +23,7 @@ export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderP
     { label: 'Início', target: 'inicio' },
     { label: 'Sobre', target: 'sobre' },
     { label: 'Essências', target: 'produtos' },
-    { label: 'Monte a Sua', target: 'customizer' },
+    { label: 'Como Funciona', target: 'como-funciona' },
     { label: 'Contato', target: 'contato' },
   ];
 
@@ -35,14 +35,11 @@ export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderP
           {/* Logo / Brand */}
           <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => onGoToSection?.('inicio')}>
             <img 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0_cMhgWK8UCrnHbdaw1Jg2TYJ1EFnDMD_w7bHEAXfK0Mj-l_A7rL6ny90ql1Y8wx5Q7Rgvh6EL52bNd_Cdbwl1TKcB3HnLaS4oLLaXMOfGZhdciUt_aBlqaDKiOscHRjMUd8-r6erh6fw9LrfMgAAf_v0Mzo2h0b2SDcfbBv8GbW7VD_uGwtiXqbJLzWvGXDAVv33ZlimF_Rw1CdtYY5SvMHG4iQt88HVrXep6dHOxLq4XWLqj5XQNhBK4zOTAuQtuyqGcO7ZtMQ" 
+              src="/images/logo-navbar.png"
               alt="Lumina Velas Artesanais Logo" 
               id="header-logo"
-              className="h-12 w-auto object-contain mr-2"
+              className="h-12 w-auto object-contain"
             />
-            <span className="font-editorial text-2xl font-bold tracking-tight text-primary hidden sm:inline-block">
-              Lumina
-            </span>
           </div>
 
           {/* Desktop Nav */}
@@ -62,16 +59,6 @@ export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderP
           {/* Right actions */}
           <div className="flex items-center space-x-4">
             
-            {/* Customize quick trigger button */}
-            <button
-              id="header-customize-btn"
-              onClick={() => onGoToSection?.('customizer')}
-              className="hidden sm:flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              Bespoke Lab
-            </button>
-
             {/* Shopping Cart button */}
             <button
               id="header-cart-btn"
