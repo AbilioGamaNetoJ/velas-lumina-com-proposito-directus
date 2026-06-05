@@ -31,7 +31,8 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
 
-    let msg = `✨ *Lumina Velas Artesanais - Meu Pedido* ✨\n\n`;
+    let msg = `*Lumina Velas Artesanais - Meu Pedido*\n\n`;
+    msg += `Olá, vim do site da Lumina e gostaria de fazer um pedido!\n\n`;
     
     cartItems.forEach((item, index) => {
       msg += `*${index + 1}. ${item.product.name}*\n`;
@@ -40,8 +41,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
     });
 
     msg += `---------------------------------\n`;
-    msg += `*Valor Total Estimado: R$ ${subtotal.toFixed(2)}*\n\n`;
-    msg += `Gostaria de verificar a disponibilidade e fechar a encomenda destas lindezas! Obrigado!`;
+    msg += `*Valor Total Estimado: R$ ${subtotal.toFixed(2)}*`;
 
     const whatsappUrl = buildWhatsAppURL({ customMessage: msg });
     window.open(whatsappUrl, '_blank');

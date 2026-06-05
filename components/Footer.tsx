@@ -44,8 +44,7 @@ export default function Footer({ onGoToSection }: FooterProps) {
               />
             </div>
             <p className="text-sm text-muted-brown leading-relaxed max-w-sm">
-              Velas artesanais feitas com cera vegetal e óleos essenciais. 
-              Trazendo luz, aconchego e intenção para o seu dia a dia.
+              Feitas uma a uma, com as mãos e com carinho. É simples assim.
             </p>
             <div className="flex space-x-3 pt-2">
               <a 

@@ -47,7 +47,7 @@ export default function Hero({ onExplore }: HeroProps) {
 
             <ScrollReveal delay={300}>
               <p className="text-muted-brown text-base sm:text-lg leading-relaxed max-w-md lg:max-w-lg font-light lg:ml-1">
-                Descubra a magia do feito à mão com nossas velas artesanais. Produzidas com cera 100% vegetal, aromas autorais e um toque de aconchego para abraçar o seu lar.
+                Do início ao fim, feita à mão. É assim que nasce cada vela Lumina — com calma, cuidado e a satisfação de entregar algo verdadeiro.
               </p>
             </ScrollReveal>
 

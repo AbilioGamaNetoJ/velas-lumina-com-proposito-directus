@@ -9,7 +9,7 @@ export async function getProducts(): Promise<Product[]> {
       return localProducts;
     }
 
-    const query = `*[_type == "product" && defined(slug.current)] {
+    const query = `*[_type == "product" && defined(slug.current) && coalesce(inStock, true) == true] {
       _id,
       "id": slug.current,
       name,

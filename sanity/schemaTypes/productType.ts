@@ -72,6 +72,13 @@ export const productType = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'inStock',
+      title: 'Em Estoque?',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Se desmarcado, o produto ficará invisível no site até voltar a ter estoque.',
+    }),
+    defineField({
       name: 'scents',
       title: 'Aromas / Essências',
       type: 'array',
