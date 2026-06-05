@@ -174,7 +174,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                       <p className="font-editorial text-lg font-bold text-dark-brown">Valor Total</p>
                       <p className="text-xs text-muted-brown">Entrega combinada via WhatsApp</p>
                     </div>
-                    <p className="font-editorial text-2xl font-bold text-primary">
+                    <p className="font-sans text-2xl font-bold tracking-tight text-primary">
                       R$ {subtotal.toFixed(2)}
                     </p>
                   </div>

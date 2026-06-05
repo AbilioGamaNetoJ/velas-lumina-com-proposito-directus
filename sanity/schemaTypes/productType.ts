@@ -60,7 +60,7 @@ export const productType = defineType({
       options: {
         list: [
           { title: 'Velas', value: 'velas' },
-          { title: 'Cestas', value: 'cestas' },
+          { title: 'Arranjos', value: 'arranjos' },
           { title: 'Kits', value: 'kits' },
         ],
       },

@@ -97,12 +97,7 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
                     draggable={false}
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-dark-brown/40 via-transparent to-transparent pointer-events-none" />
-
-                  <div className="absolute bottom-6 left-6 text-left text-white hidden md:block">
-                    <p className="font-editorial text-2xl font-bold">{product.name}</p>
-                    <p className="text-white/80 text-xs">{product.subtitle}</p>
-                  </div>
+                  {/* Removed redundant text overlay on image as the title is already on the right panel */}
 
                   {/* Dot indicators — mobile only */}
                   {allImages.length > 1 && (
@@ -119,12 +114,12 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
                 {/* Thumbnails — horizontal strip below main image */}
                 {allImages.length > 1 && (
-                  <div className="flex gap-2 p-3 overflow-x-auto bg-white/50 backdrop-blur-sm shrink-0">
+                  <div className="flex gap-3 p-4 overflow-x-auto bg-white/50 backdrop-blur-sm shrink-0">
                     {allImages.map((imgUrl, idx) => (
                       <button
                         key={idx}
                         onClick={() => goTo(idx)}
-                        className={`relative shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${idx === activeIndex ? 'border-primary shadow-md opacity-100' : 'border-transparent opacity-55 hover:opacity-90'}`}
+                        className={`relative shrink-0 w-16 h-16 rounded-md overflow-hidden transition-all duration-300 cursor-pointer ${idx === activeIndex ? 'ring-1 ring-primary ring-offset-2 opacity-100' : 'opacity-50 hover:opacity-100'}`}
                       >
                         <img src={imgUrl} alt={`${product.name} miniatura ${idx + 1}`} className="w-full h-full object-cover" />
                       </button>
@@ -147,7 +142,7 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
                     </h2>
                     <div className="mt-1">
                       <span className="text-[10px] uppercase tracking-widest text-muted-brown/60 block">A partir de</span>
-                      <p className="font-editorial text-2xl font-bold text-primary">
+                      <p className="font-sans text-2xl font-bold tracking-tight text-primary">
                         R$ {product.price.toFixed(2)}
                       </p>
                     </div>
@@ -155,9 +150,8 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
                   {/* Narrative description */}
                   <div className="text-left">
-                    <h3 className="text-xs uppercase tracking-wider font-bold text-dark-brown mb-2 flex items-center gap-2">
-                      <span className="w-3 h-px bg-accent-gold inline-block" />
-                      Sobre esta essência
+                    <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary/70 mb-3">
+                      Sobre a Essência
                     </h3>
                     <p className="text-muted-brown text-sm sm:text-sm leading-relaxed">
                       {product.description}
@@ -166,22 +160,22 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
                   {/* Product details mini-grid */}
                   {product.details && (product.details.weight || product.details.burnTime) && (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-10 border-y border-high-blush/30 py-4 mt-2">
                       {product.details.weight && (
-                        <div className="bg-soft-blush rounded-xl p-3 flex items-center gap-2">
-                          <Scale className="w-3.5 h-3.5 text-primary/60 shrink-0" />
-                          <div>
-                            <p className="text-[10px] uppercase tracking-wider text-muted-brown/70">Peso</p>
-                            <p className="text-xs font-semibold text-dark-brown">{product.details.weight}</p>
+                        <div className="flex items-center gap-3">
+                          <Scale className="w-4 h-4 text-primary shrink-0" />
+                          <div className="flex flex-col">
+                            <span className="text-[9px] uppercase tracking-widest text-muted-brown/60 leading-none mb-1">Peso</span>
+                            <span className="text-xs text-dark-brown font-bold leading-none">{product.details.weight}</span>
                           </div>
                         </div>
                       )}
                       {product.details.burnTime && (
-                        <div className="bg-soft-blush rounded-xl p-3 flex items-center gap-2">
-                          <Flame className="w-3.5 h-3.5 text-primary/60 shrink-0" />
-                          <div>
-                            <p className="text-[10px] uppercase tracking-wider text-muted-brown/70">Queima</p>
-                            <p className="text-xs font-semibold text-dark-brown">{product.details.burnTime}</p>
+                        <div className="flex items-center gap-3">
+                          <Flame className="w-4 h-4 text-primary shrink-0" />
+                          <div className="flex flex-col">
+                            <span className="text-[9px] uppercase tracking-widest text-muted-brown/60 leading-none mb-1">Queima</span>
+                            <span className="text-xs text-dark-brown font-bold leading-none">{product.details.burnTime}</span>
                           </div>
                         </div>
                       )}
@@ -190,8 +184,7 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
                   {/* Scent profiles */}
                   <div className="text-left">
-                    <h3 className="text-xs uppercase tracking-wider font-bold text-dark-brown mb-2 flex items-center gap-2">
-                      <span className="w-3 h-px bg-accent-gold inline-block" />
+                    <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary/70 mb-3">
                       Composição Aromática
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -208,28 +201,27 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
 
                 {/* Footer buttons */}
                 <div className="mt-8">
-                  <div className="w-full h-px mb-4 bg-gradient-to-r from-transparent via-high-blush to-transparent" />
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col sm:flex-row gap-4">
 
                   <button
                     onClick={() => {
                       onAddToCart(product);
                       onClose();
                     }}
-                    className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-medium text-sm tracking-wide py-3.5 px-4 rounded-xl shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                   >
                     <ShoppingCart className="w-4 h-4 shrink-0" />
-                    <span>Adicionar ao Carrinho</span>
+                    <span>Adicionar</span>
                   </button>
 
                   <a
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2.5 border border-emerald-700/25 bg-emerald-50/40 hover:bg-emerald-50 hover:border-emerald-700/50 text-emerald-800 font-medium text-sm tracking-wide py-3.5 px-4 rounded-xl transition-all duration-200"
+                    className="flex-1 inline-flex items-center justify-center gap-2.5 border border-primary/20 hover:border-primary text-primary hover:bg-soft-blush font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full transition-all duration-300"
                   >
                     <WhatsAppIcon className="w-4 h-4 shrink-0" />
-                    <span>Comprar no WhatsApp</span>
+                    <span>WhatsApp</span>
                   </a>
 
                   </div>

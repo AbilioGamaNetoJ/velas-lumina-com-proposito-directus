@@ -11,6 +11,7 @@ import Hero from '@/components/Hero';
 import FeaturedSection from '@/components/FeaturedSection';
 import ProductCard from '@/components/ProductCard';
 import ProductDetailModal from '@/components/ProductDetailModal';
+import ScrollReveal from '@/components/ScrollReveal';
 import HowItWorks from '@/components/HowItWorks';
 import ProductCarousel from '@/components/ProductCarousel';
 import CartDrawer from '@/components/CartDrawer';
@@ -24,7 +25,7 @@ export default function HomeClient({ products }: { products: Product[] }) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
   // Filtering & Catalog states
-  const [activeCategory, setActiveCategory] = useState<'todas' | 'velas' | 'cestas' | 'kits'>('todas');
+  const [activeCategory, setActiveCategory] = useState<'todas' | 'velas' | 'arranjos' | 'kits'>('todas');
   const [searchQuery, setSearchQuery] = useState('');
   
   // Cart state — hydrates empty to avoid SSR mismatch, then loads from localStorage
@@ -51,6 +52,14 @@ export default function HomeClient({ products }: { products: Product[] }) {
   }, [cartItems]);
 
   const handleGoToSection = (id: string) => {
+    if (id === 'contato') {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+      return;
+    }
+
     const el = document.getElementById(id);
     if (el) {
       const offset = 80; // height of sticky header
@@ -155,34 +164,40 @@ export default function HomeClient({ products }: { products: Product[] }) {
             </div>
 
             {/* Dynamic filter bar and search panels */}
-            <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-soft-blush/40 p-4 rounded-2xl border border-high-blush/30 mb-10 text-left">
+            <div className="flex flex-col md:flex-row gap-6 justify-between items-center mb-10">
               
-              {/* Category tabs */}
-              <div className="flex flex-wrap gap-2 w-full md:w-auto">
-                {(['todas', 'velas', 'cestas', 'kits'] as const).map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all duration-200 cursor-pointer ${
-                      activeCategory === cat
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'bg-white/80 text-muted-brown border border-high-blush/20 hover:bg-white hover:text-primary'
-                    }`}
-                  >
-                    {cat === 'todas' ? 'Todas' : cat}
-                  </button>
-                ))}
+              {/* Category tabs - Segmented Control */}
+              <div className="flex w-full md:w-auto p-1 bg-high-blush/10 rounded-full border border-high-blush/20">
+                {(['todas', 'velas', 'arranjos', 'kits'] as const).map((cat) => {
+                  let displayName: string = cat;
+                  if (cat === 'todas') displayName = 'Todas';
+                  if (cat === 'arranjos') displayName = 'Arranjos';
+
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat)}
+                      className={`flex-1 md:flex-none px-5 py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full transition-all duration-300 cursor-pointer ${
+                        activeCategory === cat
+                          ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
+                          : 'bg-transparent text-muted-brown hover:text-primary'
+                      }`}
+                    >
+                      {displayName}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Instant Search textbox */}
-              <div className="relative w-full md:w-80">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-brown/60" />
+              <div className="relative w-full md:w-80 group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-brown/50 group-focus-within:text-primary transition-colors duration-300" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar lavanda, mel, rosas..."
-                  className="w-full pl-10 pr-4 py-2.5 bg-white text-dark-brown text-xs rounded-xl border border-high-blush/30 outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-muted-brown/50"
+                  placeholder="Buscar essências..."
+                  className="w-full pl-11 pr-4 py-2.5 bg-white text-dark-brown text-sm rounded-full border border-high-blush/30 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 placeholder:text-muted-brown/50"
                 />
               </div>
 
@@ -208,9 +223,11 @@ export default function HomeClient({ products }: { products: Product[] }) {
               </div>
             ) : (
               <ProductCarousel>
-                  {filteredProducts.map((prod) => (
-                    <div
-                      className="transition-all duration-300 h-full"
+                  {filteredProducts.map((prod, index) => (
+                    <ScrollReveal
+                      animation="fade-in-up"
+                      delay={index * 150}
+                      className="h-full"
                       key={prod.id}
                     >
                       <ProductCard 
@@ -218,7 +235,7 @@ export default function HomeClient({ products }: { products: Product[] }) {
                         onSelect={setSelectedProduct} 
                         onAddToCart={handleAddToCart} 
                       />
-                    </div>
+                    </ScrollReveal>
                   ))}
               </ProductCarousel>
             )}

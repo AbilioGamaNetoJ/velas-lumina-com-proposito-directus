@@ -10,6 +10,8 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+import ScrollReveal from './ScrollReveal';
+
 const steps = [
   {
     number: '01',
@@ -45,7 +47,7 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <ScrollReveal delay={100} className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider uppercase mb-3">
             Processo de Compra
           </div>
@@ -55,16 +57,21 @@ export default function HowItWorks() {
           <p className="text-muted-brown text-sm sm:text-base mt-3">
             Simples, rápido e com atendimento personalizado pelo WhatsApp — do catálogo à sua porta.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Steps */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
           <div className="hidden lg:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-high-blush/60 z-0" />
 
-          {steps.map((step) => {
+          {steps.map((step, index) => {
             const Icon = step.icon;
             return (
-              <div key={step.number} className="relative flex flex-col items-center text-center z-10">
+              <ScrollReveal 
+                key={step.number} 
+                animation="fade-in-right"
+                delay={index * 200}
+                className="relative flex flex-col items-center text-center z-10"
+              >
                 <div className="w-20 h-20 rounded-full bg-white border-2 border-high-blush/40 shadow-sm flex items-center justify-center mb-4 relative">
                   <Icon className="w-7 h-7 text-primary" />
                   <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -73,13 +80,13 @@ export default function HowItWorks() {
                 </div>
                 <h3 className="font-editorial text-base font-bold text-dark-brown mb-2">{step.title}</h3>
                 <p className="text-muted-brown text-xs leading-relaxed max-w-[200px]">{step.description}</p>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-16 space-y-3">
+        <ScrollReveal delay={800} className="text-center mt-16 space-y-3">
           <a
             href={buildWhatsAppURL({ customMessage: 'Olá! Gostaria de fazer um pedido.' })}
             target="_blank"
@@ -92,7 +99,7 @@ export default function HowItWorks() {
           <p className="text-xs text-muted-brown">
             Tempo médio de resposta: menos de 1h &nbsp;·&nbsp; Pagamento combinado &nbsp;·&nbsp; Entrega nacional
           </p>
-        </div>
+        </ScrollReveal>
 
       </div>
     </section>

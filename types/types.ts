@@ -12,7 +12,7 @@ export interface Product {
   price: number;
   image: string;
   gallery?: string[];
-  category: 'velas' | 'cestas' | 'kits';
+  category: 'velas' | 'arranjos' | 'kits';
   details?: {
     weight?: string;
     burnTime?: string;

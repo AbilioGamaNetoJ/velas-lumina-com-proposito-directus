@@ -10,6 +10,7 @@ import ProductCard from '@/components/ProductCard';
 import ProductCarousel from '@/components/ProductCarousel';
 import { Product } from '@/types/types';
 import { Flame } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
 
 interface Props {
   featuredProducts: Product[];
@@ -47,20 +48,25 @@ export default function FeaturedSection({ featuredProducts, onSelectProduct, onA
             Destaques do mês de {currentMonth}
           </h2>
           <p className="text-muted-brown text-sm sm:text-base mt-4 max-w-xl mx-auto">
-            Uma curadoria exclusiva de velas e cestas em evidência neste mês. 
+            Uma curadoria exclusiva de velas e arranjos em evidência neste mês. 
             Disponibilidade limitada.
           </p>
         </div>
 
         <ProductCarousel>
-          {featuredProducts.map((prod) => (
-            <div className="transition-all duration-300 h-full" key={`featured-${prod.id}`}>
+          {featuredProducts.map((prod, index) => (
+            <ScrollReveal 
+              animation="fade-in-up" 
+              delay={index * 150}
+              className="h-full"
+              key={`featured-${prod.id}`}
+            >
               <ProductCard 
                 product={prod} 
                 onSelect={onSelectProduct} 
                 onAddToCart={onAddToCart} 
               />
-            </div>
+            </ScrollReveal>
           ))}
         </ProductCarousel>
 

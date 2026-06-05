@@ -31,7 +31,7 @@ export const PRODUCTS: Product[] = [
     scents: ['Rosas Silvestres', 'Lavanda'],
     price: 180.00,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBF04SeMUoKVCJeIHLxZcjRN3rmf-IRJThYS5zEWLqV7-m77es265zkzCoq3H_P30BSaGj12wjKYVwbyMFXNcuJBV4lVw9tyFqnr03zsnEIf3CdqAAyhD5ZPp9gVCrYbS1O3yu5Gd15sDtyH7Cy-bVQMcSi8bt_LuCgwWePrNflLJUZTBhNtf4csdrWMigm30fX49Czeud-FkvtuI0VtUWrKlMMzK7XpFsHOKm1U6GO10XP9DiwYn4zkXyEvYQ_NEBNzu0MJOM-qsE',
-    category: 'cestas',
+    category: 'arranjos',
     details: {
       dimensions: '22cm x 22cm x 15cm',
       essenceStrength: 'Intensa'
@@ -62,7 +62,7 @@ export const PRODUCTS: Product[] = [
     scents: ['Jasmim', 'Verbena'],
     price: 95.00,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBF04SeMUoKVCJeIHLxZcjRN3rmf-IRJThYS5zEWLqV7-m77es265zkzCoq3H_P30BSaGj12wjKYVwbyMFXNcuJBV4lVw9tyFqnr03zsnEIf3CdqAAyhD5ZPp9gVCrYbS1O3yu5Gd15sDtyH7Cy-bVQMcSi8bt_LuCgwWePrNflLJUZTBhNtf4csdrWMigm30fX49Czeud-FkvtuI0VtUWrKlMMzK7XpFsHOKm1U6GO10XP9DiwYn4zkXyEvYQ_NEBNzu0MJOM-qsE',
-    category: 'cestas'
+    category: 'arranjos'
   },
   {
     id: 'vela-margarida-mel',
@@ -113,7 +113,7 @@ export const PRODUCTS: Product[] = [
     scents: ['Cereja e Avelã', 'Lavanda', 'Jasmim', 'Mel'],
     price: 250.00,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBF04SeMUoKVCJeIHLxZcjRN3rmf-IRJThYS5zEWLqV7-m77es265zkzCoq3H_P30BSaGj12wjKYVwbyMFXNcuJBV4lVw9tyFqnr03zsnEIf3CdqAAyhD5ZPp9gVCrYbS1O3yu5Gd15sDtyH7Cy-bVQMcSi8bt_LuCgwWePrNflLJUZTBhNtf4csdrWMigm30fX49Czeud-FkvtuI0VtUWrKlMMzK7XpFsHOKm1U6GO10XP9DiwYn4zkXyEvYQ_NEBNzu0MJOM-qsE',
-    category: 'cestas',
+    category: 'arranjos',
     details: {
       dimensions: '30cm x 30cm x 18cm',
       essenceStrength: 'Intensa'
