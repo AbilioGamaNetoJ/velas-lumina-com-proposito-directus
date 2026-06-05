@@ -21,7 +21,6 @@ export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderP
 
   const navItems = [
     { label: 'Início', target: 'inicio' },
-    { label: 'Sobre', target: 'sobre' },
     { label: 'Essências', target: 'produtos' },
     { label: 'Como Funciona', target: 'como-funciona' },
     { label: 'Contato', target: 'contato' },
