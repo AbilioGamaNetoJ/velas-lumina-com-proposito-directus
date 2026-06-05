@@ -27,15 +27,19 @@ export default function HomeClient({ products }: { products: Product[] }) {
   const [activeCategory, setActiveCategory] = useState<'todas' | 'velas' | 'cestas' | 'kits'>('todas');
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Cart state with lazy localstorage loading
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+  // Cart state — hydrates empty to avoid SSR mismatch, then loads from localStorage
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  useEffect(() => {
     try {
       const persisted = localStorage.getItem('lumina-velas-cart');
-      return persisted ? JSON.parse(persisted) : [];
+      if (persisted) {
+        setCartItems(JSON.parse(persisted));
+      }
     } catch (e) {
-      return [];
+      // ignore
     }
-  });
+  }, []);
 
   // Persist cart updates
   useEffect(() => {

@@ -25,7 +25,7 @@ export default function Hero({ onExplore }: HeroProps) {
           <div className="flex flex-col items-start text-left space-y-6 max-w-xl animate-fade-up">
             <div className="inline-flex items-center gap-2 bg-high-blush/60 border border-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase">
               <Flame className="w-3.5 h-3.5" />
-              Feita com intenção
+              Feito com Propósito
             </div>
 
             <h1 className="font-editorial text-4xl sm:text-5xl lg:text-5xl font-bold text-dark-brown leading-[1.05] tracking-tight">
