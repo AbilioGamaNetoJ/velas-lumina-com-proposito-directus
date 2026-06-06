@@ -23,6 +23,7 @@ export default function ScrollReveal({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

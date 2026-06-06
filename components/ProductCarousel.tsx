@@ -24,6 +24,26 @@ export default function ProductCarousel({ children }: ProductCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
+  // Intersection observer for staggered animation
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (containerRef.current) observer.unobserve(containerRef.current);
+        }
+      },
+      { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => {
+      if (containerRef.current) observer.unobserve(containerRef.current);
+    };
+  }, []);
+
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
   const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
@@ -47,11 +67,20 @@ export default function ProductCarousel({ children }: ProductCarouselProps) {
   }, [emblaApi, onSelect]);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={containerRef}>
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex touch-pan-y -ml-4 sm:-ml-6 lg:-ml-8">
-          {React.Children.map(children, (child) => (
-            <div className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] xl:flex-[0_0_25%] pl-4 sm:pl-6 lg:pl-8 min-w-0">
+          {React.Children.map(children, (child, index) => (
+            <div 
+              className={`flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] xl:flex-[0_0_25%] pl-4 sm:pl-6 lg:pl-8 min-w-0 transition-all duration-800 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+              }`}
+              style={{
+                transitionDelay: `${index * 150}ms`,
+                transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+                willChange: 'opacity, transform'
+              }}
+            >
               {child}
             </div>
           ))}

@@ -223,19 +223,14 @@ export default function HomeClient({ products }: { products: Product[] }) {
               </div>
             ) : (
               <ProductCarousel>
-                  {filteredProducts.map((prod, index) => (
-                    <ScrollReveal
-                      animation="fade-in-up"
-                      delay={index * 150}
-                      className="h-full"
-                      key={prod.id}
-                    >
+                  {filteredProducts.map((prod) => (
+                    <div className="h-full" key={prod.id}>
                       <ProductCard 
                         product={prod} 
                         onSelect={setSelectedProduct} 
                         onAddToCart={handleAddToCart} 
                       />
-                    </ScrollReveal>
+                    </div>
                   ))}
               </ProductCarousel>
             )}

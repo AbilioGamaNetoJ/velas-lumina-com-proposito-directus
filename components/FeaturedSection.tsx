@@ -54,19 +54,14 @@ export default function FeaturedSection({ featuredProducts, onSelectProduct, onA
         </div>
 
         <ProductCarousel>
-          {featuredProducts.map((prod, index) => (
-            <ScrollReveal 
-              animation="fade-in-up" 
-              delay={index * 150}
-              className="h-full"
-              key={`featured-${prod.id}`}
-            >
+          {featuredProducts.map((prod) => (
+            <div className="h-full" key={`featured-${prod.id}`}>
               <ProductCard 
                 product={prod} 
                 onSelect={onSelectProduct} 
                 onAddToCart={onAddToCart} 
               />
-            </ScrollReveal>
+            </div>
           ))}
         </ProductCarousel>
 
