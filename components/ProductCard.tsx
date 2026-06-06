@@ -18,7 +18,7 @@ export default function ProductCard({ product, onSelect, onAddToCart }: ProductC
   return (
     <div 
       id={`product-card-${product.id}`}
-      className="bg-white rounded-2xl overflow-hidden hover:shadow-ambient hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full border border-high-blush/20"
+      className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] border border-primary/15 hover:shadow-ambient hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full"
     >
       {/* Product Image Stage */}
       <div className="relative aspect-square overflow-hidden bg-soft-blush cursor-pointer" onClick={() => onSelect(product)}>

@@ -11,7 +11,7 @@ interface ProductCarouselProps {
 
 export default function ProductCarousel({ children }: ProductCarouselProps) {
   const [isClient, setIsClient] = useState(false);
-  const plugins = React.useMemo(() => [Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })], []);
+  const plugins = React.useMemo(() => [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })], []);
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     align: 'start', 
     loop: true,
@@ -70,20 +70,36 @@ export default function ProductCarousel({ children }: ProductCarouselProps) {
     <div className="relative" ref={containerRef}>
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex touch-pan-y -ml-4 sm:-ml-6 lg:-ml-8">
-          {React.Children.map(children, (child, index) => (
-            <div 
-              className={`flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] xl:flex-[0_0_25%] pl-4 sm:pl-6 lg:pl-8 min-w-0 transition-all duration-800 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-              }`}
-              style={{
-                transitionDelay: `${index * 150}ms`,
-                transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-                willChange: 'opacity, transform'
-              }}
-            >
-              {child}
-            </div>
-          ))}
+          {/* Duplicate children to ensure infinite loop works without rewinding */}
+          {(() => {
+            const childArray = React.Children.toArray(children);
+            const count = childArray.length;
+            if (count === 0) return null;
+            
+            const items = count < 6 
+              ? [...childArray, ...childArray, ...childArray].slice(0, Math.max(6, count * 2))
+              : childArray;
+              
+            return items.map((child, index) => (
+              <div 
+                key={`carousel-item-${index}`}
+                className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] xl:flex-[0_0_25%] pl-4 sm:pl-6 lg:pl-8 min-w-0"
+              >
+                <div
+                  className={`h-full transition-all duration-800 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+                  }`}
+                  style={{
+                    transitionDelay: `${(index % count) * 150}ms`,
+                    transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+                    willChange: 'opacity, transform'
+                  }}
+                >
+                  {child}
+                </div>
+              </div>
+            ));
+          })()}
         </div>
       </div>
 

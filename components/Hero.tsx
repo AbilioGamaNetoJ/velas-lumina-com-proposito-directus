@@ -56,7 +56,7 @@ export default function Hero({ onExplore }: HeroProps) {
                 <button
                   id="hero-explore-cta"
                   onClick={onExplore}
-                  className="group inline-flex items-center justify-center gap-3 bg-dark-brown hover:bg-black text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase px-10 py-5 rounded-none border border-dark-brown hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 pointer-events-auto cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-3 bg-[#5C4033] hover:bg-[#4A3329] text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase px-10 py-5 rounded-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 pointer-events-auto cursor-pointer"
                 >
                   Conheça Nossas Velas
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -68,7 +68,7 @@ export default function Hero({ onExplore }: HeroProps) {
                     e.preventDefault();
                     document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="inline-flex items-center justify-center gap-2 text-dark-brown hover:text-primary font-medium text-xs sm:text-sm tracking-[0.1em] uppercase px-6 py-5 border-b border-transparent hover:border-primary transition-all duration-300 cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 text-dark-brown hover:text-[#5C4033] font-medium text-xs sm:text-sm tracking-[0.1em] uppercase px-6 py-5 border-b border-transparent hover:border-[#5C4033] transition-all duration-300 cursor-pointer"
                 >
                   Como funciona?
                 </a>
@@ -77,18 +77,18 @@ export default function Hero({ onExplore }: HeroProps) {
 
             {/* Micro details - refined and elegant */}
             <ScrollReveal delay={500} className="w-full max-w-xl text-left lg:ml-2 pt-6 mt-8">
-              <div className="flex flex-wrap sm:flex-nowrap items-center divide-x divide-primary/15 border-t border-primary/10 w-full">
-                <div className="pr-6 sm:pr-8 py-3">
-                  <dt className="text-dark-brown font-editorial text-2xl sm:text-3xl font-normal">Aromas</dt>
-                  <dd className="text-[9px] sm:text-[10px] text-muted-brown uppercase tracking-[0.2em] mt-1.5 font-bold">Exclusivos</dd>
+              <div className="flex w-full justify-between items-start divide-x divide-primary/15 border-t border-primary/10">
+                <div className="py-3 pr-2 min-[375px]:pr-4 sm:pr-8">
+                  <dt className="text-dark-brown font-editorial text-[1.1rem] min-[375px]:text-xl sm:text-3xl font-normal">Aromas</dt>
+                  <dd className="text-[8px] min-[375px]:text-[9px] sm:text-[10px] text-muted-brown uppercase tracking-[0.1em] min-[375px]:tracking-[0.15em] sm:tracking-[0.2em] mt-1 sm:mt-1.5 font-bold break-words">Exclusivos</dd>
                 </div>
-                <div className="px-6 sm:px-8 py-3">
-                  <dt className="text-dark-brown font-editorial text-2xl sm:text-3xl font-normal">Queima</dt>
-                  <dd className="text-[9px] sm:text-[10px] text-muted-brown uppercase tracking-[0.2em] mt-1.5 font-bold">Limpa & Lenta</dd>
+                <div className="py-3 px-2 min-[375px]:px-4 sm:px-8">
+                  <dt className="text-dark-brown font-editorial text-[1.1rem] min-[375px]:text-xl sm:text-3xl font-normal">Queima</dt>
+                  <dd className="text-[8px] min-[375px]:text-[9px] sm:text-[10px] text-muted-brown uppercase tracking-[0.1em] min-[375px]:tracking-[0.15em] sm:tracking-[0.2em] mt-1 sm:mt-1.5 font-bold break-words">Limpa & Lenta</dd>
                 </div>
-                <div className="pl-6 sm:pl-8 py-3">
-                  <dt className="text-dark-brown font-editorial text-2xl sm:text-3xl font-normal">Atmosfera</dt>
-                  <dd className="text-[9px] sm:text-[10px] text-muted-brown uppercase tracking-[0.2em] mt-1.5 font-bold">Aconchegante</dd>
+                <div className="py-3 pl-2 min-[375px]:pl-4 sm:pl-8">
+                  <dt className="text-dark-brown font-editorial text-[1.1rem] min-[375px]:text-xl sm:text-3xl font-normal">Atmosfera</dt>
+                  <dd className="text-[8px] min-[375px]:text-[9px] sm:text-[10px] text-muted-brown uppercase tracking-[0.1em] min-[375px]:tracking-[0.15em] sm:tracking-[0.2em] mt-1 sm:mt-1.5 font-bold break-words">Aconchegante</dd>
                 </div>
               </div>
             </ScrollReveal>
