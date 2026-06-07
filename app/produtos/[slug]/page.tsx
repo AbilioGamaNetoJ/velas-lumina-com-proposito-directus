@@ -58,7 +58,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       price: product.price.toFixed(2),
       priceCurrency: 'BRL',
       availability: 'https://schema.org/InStock',
-      url: `https://lumina-velas.com.br/produtos/${product.id}`,
+      url: `https://velasartesanais.luminacomproposito.com.br/produtos/${product.id}`,
     },
   };
 

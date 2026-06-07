@@ -15,7 +15,7 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL || 'https://lumina-velas.com.br'),
+  metadataBase: new URL(process.env.SITE_URL || 'https://velasartesanais.luminacomproposito.com.br'),
   title: {
     default: 'Lumina | Velas Artesanais & Botânicas',
     template: '%s | Lumina Velas Artesanais'
