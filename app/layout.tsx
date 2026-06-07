@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     template: '%s | Lumina Velas Artesanais'
   },
   description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
+  icons: {
+    icon: '/images/icon.png',
+    apple: '/images/icon.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
