@@ -17,17 +17,31 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL || 'https://velasartesanais.luminacomproposito.com.br'),
   title: {
-    default: 'Lumina | Velas Artesanais & Botânicas',
+    default: 'Lumina | Velas Artesanais & Feitas com Propósito',
     template: '%s | Lumina Velas Artesanais'
   },
-  description: 'Descubra nossas velas artesanais, naturais e veganas. Feitas com cera botânica e óleos essenciais para iluminar com propósito e sustentabilidade.',
+  description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
     url: '/',
     siteName: 'Lumina Velas',
-    title: 'Lumina | Velas Artesanais & Botânicas',
-    description: 'Velas artesanais, naturais e veganas feitas com propósito.',
+    title: 'Lumina | Velas Artesanais & Feitas com Propósito',
+    description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
+    images: [
+      {
+        url: '/images/lumina-velas.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'Lumina - Velas Artesanais feitas com propósito',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lumina | Velas Artesanais & Feitas com Propósito',
+    description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
+    images: ['/images/lumina-velas.jpeg'],
   },
   robots: {
     index: true,
