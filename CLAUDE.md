@@ -6,7 +6,14 @@
 
 ## Project Context
 
-**[README.md](./README.md)** — Full project overview: artisanal candle showcase site built with Next.js 15, Tailwind CSS v4, and Sanity CMS. WhatsApp-based checkout, no online payments.
+**[README.md](./README.md)** — Full project overview: artisanal candle showcase site built with Next.js 15, Tailwind CSS v4, and Directus v11 CMS. WhatsApp-based checkout, no online payments.
+
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Directus v11 (self-hosted headless CMS) · @directus/sdk v22
+
+**Key files:**
+- `lib/directus.ts` — Directus SDK client + `fileUrl()` helper
+- `lib/directus/get-products.ts` — `getProducts()` and `getProductBySlug()` with local fallback
+- `lib/data.ts` — Static fallback catalogue (14 products)
 
 ---
 

@@ -8,9 +8,13 @@
 
 Consulte **[README.md](./README.md)** para entender:
 - O que é o projeto (site vitrine de velas artesanais)
-- Stack tecnológica (Next.js 15, Tailwind CSS v4, Sanity CMS)
-- Estrutura de diretórios (`app/`, `components/`, `lib/`, `sanity/`, `types/`)
+- Stack tecnológica (Next.js 15, Tailwind CSS v4, Directus v11 CMS)
+- Estrutura de diretórios (`app/`, `components/`, `lib/`, `types/`)
 - Como rodar localmente e configurar `.env.local`
+
+**Arquivos-chave do CMS:**
+- `lib/directus.ts` — cliente Directus SDK + helper `fileUrl()`
+- `lib/directus/get-products.ts` — `getProducts()` e `getProductBySlug()` com fallback para `lib/data.ts`
 
 ---
 
@@ -102,7 +106,7 @@ Este projeto utiliza o **AG Kit**, um sistema modular de agentes, skills e workf
 
 ```bash
 npm install
-# Configure .env.local com seu projeto Sanity
+# Configure .env.local com NEXT_PUBLIC_DIRECTUS_URL e DIRECTUS_TOKEN
 npm run dev        # http://localhost:3001
 npm run lint       # Verificação de código
 ```

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { PRODUCTS } from '@/lib/data';
+import { getProducts, getProductBySlug } from '@/lib/directus/get-products';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppCTA from '@/components/WhatsAppCTA';
@@ -13,14 +13,15 @@ interface ProductPageProps {
 }
 
 export async function generateStaticParams() {
-  return PRODUCTS.map((product) => ({
+  const products = await getProducts();
+  return products.map((product) => ({
     slug: product.id,
   }));
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const product = PRODUCTS.find((p) => p.id === resolvedParams.slug);
+  const product = await getProductBySlug(resolvedParams.slug);
 
   if (!product) {
     return {
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
-  const product = PRODUCTS.find((p) => p.id === resolvedParams.slug);
+  const product = await getProductBySlug(resolvedParams.slug);
 
   if (!product) {
     notFound();
@@ -68,7 +69,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
+
       {/* Fake header to reuse layout. In a real app we'd share layout.tsx for these */}
       <Header cartCount={0} />
 
@@ -105,12 +106,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
+
           {/* Image Gallery Column */}
           <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-soft-blush rounded-3xl overflow-hidden shadow-ambient">
-            <img 
-              src={product.image} 
-              alt={product.name} 
+            <img
+              src={product.image}
+              alt={product.name}
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
           </div>
@@ -182,8 +183,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* CTA */}
             <div className="mt-auto">
-              <WhatsAppCTA 
-                productName={product.name} 
+              <WhatsAppCTA
+                productName={product.name}
                 price={product.price}
                 className="w-full sm:w-auto"
               >

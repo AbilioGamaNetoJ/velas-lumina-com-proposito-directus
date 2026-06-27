@@ -111,7 +111,7 @@ export default function Hero({ onExplore }: HeroProps) {
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover object-center transform scale-[1.03] group-hover:scale-100 transition-transform duration-[10s] ease-out"
+                className="w-full h-full object-cover object-center"
               />
             </div>
           </ScrollReveal>

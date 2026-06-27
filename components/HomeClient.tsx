@@ -138,7 +138,7 @@ export default function HomeClient({ products }: { products: Product[] }) {
         {/* Hero Section */}
         <Hero onExplore={() => handleGoToSection('produtos')} />
 
-        {/* Dynamic Featured Section (Sanity 'featured: true') */}
+        {/* Dynamic Featured Section (products with featured: true) */}
         <FeaturedSection 
           featuredProducts={products.filter(p => p.featured)} 
           onSelectProduct={setSelectedProduct} 
