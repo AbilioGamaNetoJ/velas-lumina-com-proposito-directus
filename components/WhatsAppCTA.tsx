@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
+import { useSiteSettings } from '@/components/SiteSettingsContext';
 
 interface WhatsAppCTAProps {
   productName?: string;
@@ -11,7 +14,8 @@ interface WhatsAppCTAProps {
 }
 
 export default function WhatsAppCTA({ productName, price, customMessage, className = '', children }: WhatsAppCTAProps) {
-  const href = buildWhatsAppURL({ productName, price, customMessage });
+  const settings = useSiteSettings();
+  const href = buildWhatsAppURL({ productName, price, customMessage, number: settings.whatsapp_number, defaultMessage: settings.whatsapp_default_message });
 
   return (
     <a

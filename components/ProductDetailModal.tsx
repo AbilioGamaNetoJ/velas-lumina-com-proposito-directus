@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { X, ShoppingCart, Sparkles, Flame, Scale } from 'lucide-react';
 import { Product } from '@/types/types';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
+import { useSiteSettings } from '@/components/SiteSettingsContext';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -25,6 +26,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 export default function ProductDetailModal({ product, onClose, onAddToCart }: ProductDetailModalProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const touchStartX = useRef<number>(0);
+  const settings = useSiteSettings();
 
   useEffect(() => {
     if (product) {
@@ -37,7 +39,7 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }: Pr
   const allImages = [product.image, ...(product.gallery || [])];
   const activeImage = allImages[activeIndex];
 
-  const whatsappUrl = buildWhatsAppURL({ productName: product.name, price: product.price });
+  const whatsappUrl = buildWhatsAppURL({ productName: product.name, price: product.price, number: settings.whatsapp_number });
 
   const goTo = (idx: number) => setActiveIndex(Math.max(0, Math.min(idx, allImages.length - 1)));
 

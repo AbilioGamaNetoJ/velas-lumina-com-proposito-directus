@@ -13,19 +13,28 @@ import ProductCard from '@/components/ProductCard';
 import ProductDetailModal from '@/components/ProductDetailModal';
 import ScrollReveal from '@/components/ScrollReveal';
 import HowItWorks from '@/components/HowItWorks';
+import FaqSection from '@/components/Faq';
 import ProductCarousel from '@/components/ProductCarousel';
 import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
-import { Product, CartItem } from '@/types/types';
-import { Search, SlidersHorizontal, AlertCircle, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Product, Category, Faq, CartItem } from '@/types/types';
+import { Search, AlertCircle, ArrowRight } from 'lucide-react';
 
-export default function HomeClient({ products }: { products: Product[] }) {
+export default function HomeClient({
+  products,
+  categories,
+  faqs,
+}: {
+  products: Product[];
+  categories: Category[];
+  faqs: Faq[];
+}) {
   // Navigation & Drawer states
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  
+
   // Filtering & Catalog states
-  const [activeCategory, setActiveCategory] = useState<'todas' | 'velas' | 'arranjos' | 'kits'>('todas');
+  const [activeCategory, setActiveCategory] = useState<string>('todas');
   const [searchQuery, setSearchQuery] = useState('');
   
   // Cart state — hydrates empty to avoid SSR mismatch, then loads from localStorage
@@ -168,25 +177,19 @@ export default function HomeClient({ products }: { products: Product[] }) {
               
               {/* Category tabs - Segmented Control */}
               <div className="flex w-full md:w-auto p-1 bg-high-blush/10 rounded-full border border-high-blush/20">
-                {(['todas', 'velas', 'arranjos', 'kits'] as const).map((cat) => {
-                  let displayName: string = cat;
-                  if (cat === 'todas') displayName = 'Todas';
-                  if (cat === 'arranjos') displayName = 'Arranjos';
-
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => setActiveCategory(cat)}
-                      className={`flex-1 md:flex-none px-5 py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full transition-all duration-300 cursor-pointer ${
-                        activeCategory === cat
-                          ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
-                          : 'bg-transparent text-muted-brown hover:text-primary'
-                      }`}
-                    >
-                      {displayName}
-                    </button>
-                  );
-                })}
+                {[{ slug: 'todas', name: 'Todas' }, ...categories].map((cat) => (
+                  <button
+                    key={cat.slug}
+                    onClick={() => setActiveCategory(cat.slug)}
+                    className={`flex-1 md:flex-none px-5 py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full transition-all duration-300 cursor-pointer ${
+                      activeCategory === cat.slug
+                        ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
+                        : 'bg-transparent text-muted-brown hover:text-primary'
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
               </div>
 
               {/* Instant Search textbox */}
@@ -240,6 +243,8 @@ export default function HomeClient({ products }: { products: Product[] }) {
         </section>
 
         <HowItWorks />
+
+        <FaqSection faqs={faqs} />
 
       </main>
 

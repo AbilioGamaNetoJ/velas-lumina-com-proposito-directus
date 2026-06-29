@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { ShoppingBag, Menu, X, MessageCircle } from 'lucide-react';
 import MobileMenu from './MobileMenu';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
+import { useSiteSettings } from '@/components/SiteSettingsContext';
 
 interface HeaderProps {
   cartCount: number;
@@ -18,11 +19,13 @@ interface HeaderProps {
 
 export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const settings = useSiteSettings();
 
   const navItems = [
     { label: 'Início', target: 'inicio' },
     { label: 'Essências', target: 'produtos' },
     { label: 'Como Funciona', target: 'como-funciona' },
+    { label: 'FAQ', target: 'faq' },
     { label: 'Contato', target: 'contato' },
   ];
 
@@ -77,7 +80,7 @@ export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderP
             {/* Whatsapp quick chat */}
             <a
               id="header-whatsapp-quick"
-              href={buildWhatsAppURL()}
+              href={buildWhatsAppURL({ number: settings.whatsapp_number, defaultMessage: settings.whatsapp_default_message })}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-full transition-colors hidden xs:block cursor-pointer"

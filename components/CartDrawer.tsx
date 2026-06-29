@@ -15,6 +15,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 import { CartItem } from '@/types/types';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
+import { useSiteSettings } from '@/components/SiteSettingsContext';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -26,13 +27,14 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem }: CartDrawerProps) {
   const subtotal = cartItems.reduce((acc, item) => acc + (item.priceAtAddition * item.quantity), 0);
+  const settings = useSiteSettings();
 
-  // Complete formatting utility to build a message for WhatsApp order list
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
 
-    let msg = `*Lumina Velas Artesanais - Meu Pedido*\n\n`;
-    msg += `Olá, vim do site da Lumina e gostaria de fazer um pedido!\n\n`;
+    const brandName = settings.brand_name;
+    let msg = `*${brandName} - Meu Pedido*\n\n`;
+    msg += `Olá, vim do site da ${brandName} e gostaria de fazer um pedido!\n\n`;
     
     cartItems.forEach((item, index) => {
       msg += `*${index + 1}. ${item.product.name}*\n`;
@@ -43,7 +45,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
     msg += `---------------------------------\n`;
     msg += `*Valor Total Estimado: R$ ${subtotal.toFixed(2)}*`;
 
-    const whatsappUrl = buildWhatsAppURL({ customMessage: msg });
+    const whatsappUrl = buildWhatsAppURL({ customMessage: msg, number: settings.whatsapp_number });
     window.open(whatsappUrl, '_blank');
   };
 

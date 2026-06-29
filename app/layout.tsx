@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { DM_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
+import { getSiteSettings } from '@/lib/directus/get-site-settings';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -14,54 +15,56 @@ const playfairDisplay = Playfair_Display({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL || 'https://velasartesanais.luminacomproposito.com.br'),
-  title: {
-    default: 'Lumina | Velas Artesanais & Feitas com Propósito',
-    template: '%s | Lumina Velas Artesanais'
-  },
-  description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
-  icons: {
-    icon: '/images/icon.png',
-    apple: '/images/icon.png',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    url: '/',
-    siteName: 'Lumina Velas',
-    title: 'Lumina | Velas Artesanais & Feitas com Propósito',
-    description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
-    images: [
-      {
-        url: '/images/lumina-velas.jpeg',
-        width: 1200,
-        height: 630,
-        alt: 'Lumina - Velas Artesanais feitas com propósito',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Lumina | Velas Artesanais & Feitas com Propósito',
-    description: 'Velas artesanais feitas à mão com cuidado e carinho. Cada peça é única, personalizada com aromas exclusivos para iluminar seus momentos mais especiais.',
-    images: ['/images/lumina-velas.jpeg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const siteUrl = process.env.SITE_URL || 'https://velasartesanais.luminacomproposito.com.br';
+
+  const ogImages = settings.og_image
+    ? [{ url: settings.og_image, width: 1200, height: 630, alt: settings.brand_name }]
+    : [{ url: '/images/lumina-velas.jpeg', width: 1200, height: 630, alt: settings.brand_name }];
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: settings.seo_title,
+      template: `%s | ${settings.brand_name}`,
+    },
+    description: settings.seo_description,
+    icons: {
+      icon: '/images/icon.png',
+      apple: '/images/icon.png',
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'pt_BR',
+      url: '/',
+      siteName: settings.brand_name,
+      title: settings.seo_title,
+      description: settings.seo_description,
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: settings.seo_title,
+      description: settings.seo_description,
+      images: [ogImages[0].url],
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  verification: {
-    google: 'Zt-IBYRuhOBYT-mBScei2IL3NLPIAVgQ4PcGdZUuekI',
-  },
-};
+    verification: {
+      google: 'Zt-IBYRuhOBYT-mBScei2IL3NLPIAVgQ4PcGdZUuekI',
+    },
+  };
+}
 
 export default function RootLayout({
   children,
