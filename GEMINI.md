@@ -160,7 +160,7 @@ Update `.context/docs/` if something changed; **antes de commitar**, atualize o 
 ### Authentication
 
 - There is no user authentication in this app — no login, no sessions, no protected routes
-- The app reads Directus with a static access token (`DIRECTUS_TOKEN`, via `staticToken()` in `lib/directus.ts`) — confirm which token is in `.env.local` before assuming it's read-only (see `.context/docs/security.md`)
+- `DIRECTUS_TOKEN` is optional — `lib/directus.ts` only attaches `staticToken()` when it's set; unset, reads rely on the Directus `Public` role (verified working: all 5 collections/singletons return data with zero auth). Locally it's set to an **admin** token for running `scripts/setup-directus-content.mjs` — never put that admin value in Vercel/production (see `.context/docs/security.md`)
 - `DIRECTUS_TOKEN` is confined to `.env.local` and consumed only server-side (`lib/directus.ts`, `scripts/setup-directus-content.mjs`) — never in `app/`/`components/` client code and never with a `NEXT_PUBLIC_` prefix
 
 ---

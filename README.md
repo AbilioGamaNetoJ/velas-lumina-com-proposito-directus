@@ -139,7 +139,7 @@ SITE_URL=http://localhost:3001
 | Variável | Descrição | Onde obter |
 |----------|-----------|------------|
 | `NEXT_PUBLIC_DIRECTUS_URL` | URL pública da instância Directus | Painel Directus → Settings |
-| `DIRECTUS_TOKEN` | Token de acesso estático com leitura em `products`/`categories`/`site_settings`/`faqs`/`privacy_policy` | Directus → Settings → Users → Token |
+| `DIRECTUS_TOKEN` | **Opcional.** Token de acesso estático. Sem ele, as leituras dependem da role `Public` do Directus (já configurada com permissão de leitura em `products`/`categories`/`site_settings`/`faqs`/`privacy_policy`/`directus_files` — confirmado funcionando). Localmente, use um token admin só para rodar `scripts/setup-directus-content.mjs`; **nunca coloque esse token admin na Vercel** | Directus → Settings → Users → Token |
 | `SITE_URL` | URL base do site | `http://localhost:3001` em dev |
 
 > 💡 O projeto funciona mesmo **sem o Directus configurado**. Cada função em `lib/directus/get-*.ts` cai automaticamente no fallback estático (`lib/data.ts` para produtos, listas fixas para categorias/FAQs, `null` para a política de privacidade) sempre que `NEXT_PUBLIC_DIRECTUS_URL` não está definida ou a chamada ao Directus falha — o site fica demonstrável com zero configuração de CMS.
