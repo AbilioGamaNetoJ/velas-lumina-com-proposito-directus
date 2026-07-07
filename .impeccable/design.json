@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-06T00:00:00.000Z",
+  "title": "Design System: Lumina Velas Artesanais",
+  "extensions": {
+    "colorMeta": {
+      "terracota-queimada": {
+        "role": "primary",
+        "displayName": "Terracota Queimada",
+        "canonical": "oklch(45% 0.09 25)",
+        "tonalRamp": [
+          "oklch(15% 0.05 25)",
+          "oklch(25% 0.07 25)",
+          "oklch(35% 0.08 25)",
+          "oklch(45% 0.09 25)",
+          "oklch(55% 0.09 25)",
+          "oklch(65% 0.08 25)",
+          "oklch(78% 0.06 25)",
+          "oklch(92% 0.02 25)"
+        ]
+      },
+      "terracota-queimada-profundo": {
+        "role": "primary-hover",
+        "displayName": "Terracota Queimada Profundo",
+        "canonical": "oklch(37% 0.09 22)",
+        "tonalRamp": []
+      },
+      "ivory-quente": {
+        "role": "neutral",
+        "displayName": "Ivory Quente",
+        "canonical": "oklch(98% 0.008 45)",
+        "tonalRamp": [
+          "oklch(20% 0.008 45)",
+          "oklch(32% 0.008 45)",
+          "oklch(44% 0.008 45)",
+          "oklch(56% 0.008 45)",
+          "oklch(68% 0.008 45)",
+          "oklch(80% 0.008 45)",
+          "oklch(90% 0.008 45)",
+          "oklch(98% 0.008 45)"
+        ]
+      },
+      "blush-suave": {
+        "role": "neutral",
+        "displayName": "Blush Suave",
+        "canonical": "oklch(97% 0.015 40)",
+        "tonalRamp": []
+      },
+      "blush-alto": {
+        "role": "neutral",
+        "displayName": "Blush Alto",
+        "canonical": "oklch(92% 0.03 40)",
+        "tonalRamp": []
+      },
+      "tinta-marrom": {
+        "role": "neutral",
+        "displayName": "Tinta Marrom",
+        "canonical": "oklch(20% 0.03 40)",
+        "tonalRamp": []
+      },
+      "marrom-suave": {
+        "role": "neutral",
+        "displayName": "Marrom Suave",
+        "canonical": "oklch(35% 0.02 40)",
+        "tonalRamp": []
+      },
+      "mel-dourado": {
+        "role": "accent",
+        "displayName": "Mel Dourado",
+        "canonical": "oklch(75% 0.13 85)",
+        "tonalRamp": [
+          "oklch(25% 0.06 85)",
+          "oklch(37% 0.08 85)",
+          "oklch(49% 0.10 85)",
+          "oklch(61% 0.12 85)",
+          "oklch(75% 0.13 85)",
+          "oklch(83% 0.11 85)",
+          "oklch(90% 0.07 85)",
+          "oklch(96% 0.03 85)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles." },
+      "title": { "displayName": "Title", "purpose": "Product names, card titles, modal headings." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy, descriptions." },
+      "label": { "displayName": "Label", "purpose": "Buttons, tags, eyebrow badges, nav links." }
+    },
+    "shadows": [
+      { "name": "ambient", "value": "0 10px 30px -10px rgba(144, 70, 66, 0.08)", "purpose": "Default soft brand-tinted glow, used at rest on the Bespoke Lab preview card." },
+      { "name": "ambient-hover", "value": "0 20px 40px -10px rgba(144, 70, 66, 0.12)", "purpose": "Escalated glow on hover, paired with a -2px lift." }
+    ],
+    "motion": [
+      { "name": "ease-reveal", "value": "cubic-bezier(0.2, 0.8, 0.2, 1)", "purpose": "Scroll-reveal and carousel entrance easing (ScrollReveal, ProductCarousel)." },
+      { "name": "lift-hover", "value": "transform 0.3s ease, box-shadow 0.3s ease", "purpose": "Primary CTA hover: translateY(-2px to -4px) + shadow escalation." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid terracotta CTA with an uppercase tracked label; lifts and glows on hover.",
+      "html": "<button class=\"ds-btn-primary\">Adicionar</button>",
+      "css": ".ds-btn-primary { background: #904642; color: #ffffff; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 16px 24px; border-radius: 12px; border: none; cursor: pointer; transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; } .ds-btn-primary:hover { background: #75322f; transform: translateY(-2px); box-shadow: 0 20px 40px -10px rgba(144, 70, 66, 0.12); } .ds-btn-primary:focus-visible { outline: 2px solid #904642; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Outlined secondary action; fills solid on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Ver detalhes</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #904642; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(144, 70, 66, 0.2); cursor: pointer; transition: all 0.3s ease; } .ds-btn-ghost:hover { border-color: #904642; background: #904642; color: #ffffff; } .ds-btn-ghost:focus-visible { outline: 2px solid #904642; outline-offset: 2px; }"
+    },
+    {
+      "name": "Category Chip (active/inactive)",
+      "kind": "chip",
+      "refersTo": "chip-category",
+      "description": "Segmented-control style catalog filter; active pill is white with a soft ring.",
+      "html": "<div class=\"ds-chip-track\"><button class=\"ds-chip ds-chip--active\">Todas</button><button class=\"ds-chip\">Velas</button></div>",
+      "css": ".ds-chip-track { display: inline-flex; padding: 4px; background: rgba(251, 228, 215, 0.1); border: 1px solid rgba(251, 228, 215, 0.2); border-radius: 9999px; } .ds-chip { padding: 10px 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; border-radius: 9999px; border: none; background: transparent; color: #544341; cursor: pointer; transition: all 0.3s ease; } .ds-chip--active { background: #ffffff; color: #904642; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }"
+    },
+    {
+      "name": "Aroma Tag",
+      "kind": "chip",
+      "refersTo": null,
+      "description": "Scent/aroma pill with a golden sparkle accent; standardize this shape across product page and modal (see Do's and Don'ts).",
+      "html": "<span class=\"ds-tag-aroma\"><svg class=\"ds-tag-aroma__icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z\"/></svg>Lavanda Francesa</span>",
+      "css": ".ds-tag-aroma { display: inline-flex; align-items: center; gap: 6px; background: #fff1ea; border: 1px solid rgba(144, 70, 66, 0.15); color: #544341; font-size: 0.75rem; font-weight: 500; padding: 6px 12px; border-radius: 9999px; } .ds-tag-aroma__icon { width: 12px; height: 12px; color: #cca72f; flex-shrink: 0; }"
+    },
+    {
+      "name": "Featured Badge",
+      "kind": "chip",
+      "refersTo": null,
+      "description": "Solid pill marking a featured product; the one chip using rounded-md instead of full.",
+      "html": "<span class=\"ds-badge-featured\">Destaque</span>",
+      "css": ".ds-badge-featured { display: inline-flex; align-items: center; gap: 4px; background: #904642; color: #ffffff; font-weight: 700; font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "White card with square image stage, soft-blush placeholder, hover lift + ambient glow.",
+      "html": "<div class=\"ds-card-product\"><div class=\"ds-card-product__image\"></div><div class=\"ds-card-product__body\"><span class=\"ds-card-product__category\">Velas</span><h3 class=\"ds-card-product__title\">Vela Margarida Amarela</h3><p class=\"ds-card-product__price\">R$ 38,00</p></div></div>",
+      "css": ".ds-card-product { background: #ffffff; border-radius: 16px; border: 1px solid rgba(144, 70, 66, 0.15); overflow: hidden; transition: all 0.5s ease; } .ds-card-product:hover { box-shadow: 0 20px 40px -10px rgba(144, 70, 66, 0.12); transform: translateY(-4px); } .ds-card-product__image { aspect-ratio: 1 / 1; background: #fff1ea; } .ds-card-product__body { padding: 24px; } .ds-card-product__category { font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; color: rgba(144, 70, 66, 0.7); } .ds-card-product__title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #251911; margin: 8px 0; } .ds-card-product__price { color: #904642; font-weight: 500; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": null,
+      "description": "Rounded-full search field with a soft focus ring in the accent hue.",
+      "html": "<input class=\"ds-input-search\" type=\"text\" placeholder=\"Buscar essências...\" />",
+      "css": ".ds-input-search { width: 100%; padding: 10px 16px 10px 44px; background: #ffffff; color: #251911; font-size: 0.875rem; border-radius: 9999px; border: 1px solid rgba(251, 228, 215, 0.3); outline: none; transition: all 0.3s ease; } .ds-input-search::placeholder { color: rgba(84, 67, 65, 0.5); } .ds-input-search:focus { border-color: #904642; box-shadow: 0 0 0 4px rgba(144, 70, 66, 0.1); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Vitrine Iluminada",
+    "overview": "Lumina reads like the warm glow of a chandlery shop window at dusk — the kind that makes a passerby slow down and step inside. It's editorial rather than decorative: a confident serif carries the storytelling, a clean sans carries the practical copy, and a single terracotta accent does the work most sites spread across five colors. Nothing here is loud. The site earns its premium feel through restraint, generous whitespace, and unhurried motion, not through ornament. This system explicitly rejects the generic marketplace grid, cold SaaS/tech minimalism, and exaggerated luxury editorial. Lumina sits deliberately between those poles: sophisticated enough to feel considered, warm enough to feel handmade.",
+    "keyCharacteristics": [
+      "One committed accent (terracota-queimada) carrying navigation, CTAs, links, and icon accents — never diluted with a second competing hue.",
+      "Playfair Display for anything that tells the story (headlines, prices, product names); DM Sans for anything functional (body copy, labels, nav).",
+      "Soft, blurred organic background shapes instead of hard geometric decoration — the site's one recurring atmosphere device.",
+      "Every primary CTA lifts and glows on hover — the site's signature tactile confirmation."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Terracota Queimada is the only color allowed to carry interactive meaning (link, button, active state, focus). Mel Dourado is decorative only.", "section": "colors" },
+      { "name": "The No-Pure-Black Rule", "body": "Every dark value in this system carries the brand's own warm hue. Never introduce #000, #111, or a cool gray for text or shadows.", "section": "colors" },
+      { "name": "The Serif-Tells-The-Story Rule", "body": "If a piece of copy is narrative or emotional, it's Playfair Display. If it's functional, it's DM Sans. Never mix the two roles.", "section": "typography" },
+      { "name": "The Glow-On-Interaction Rule", "body": "Shadows only escalate in response to hover/focus; nothing ships with a heavy shadow at rest.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep Terracota Queimada as the only interactive-meaning color; every button, link, and active state routes through it.",
+      "Do use Playfair Display exclusively for narrative/emotional copy and DM Sans for everything functional.",
+      "Do pair every primary CTA's hover state with both a lift and a shadow escalation.",
+      "Do use .shadow-ambient / .shadow-ambient-hover for any new elevated surface instead of inventing a new box-shadow value.",
+      "Do default new buttons to rounded-xl (12px); reserve rounded-full for genuinely circular, icon-only controls."
+    ],
+    "donts": [
+      "Don't build another generic marketplace grid, a cold SaaS-flat dashboard look, or an over-the-top luxury-editorial page.",
+      "Don't invent a new one-off shadow rgba value.",
+      "Don't style the same semantic element two different ways on different screens (e.g. the aroma tag).",
+      "Don't duplicate the WhatsApp CTA style — standardize on the solid bg-primary treatment.",
+      "Don't add another tiny-uppercase-tracked eyebrow badge above a section without variation.",
+      "Don't use Mel Dourado for anything clickable — it's a decorative accent only."
+    ]
+  }
+}

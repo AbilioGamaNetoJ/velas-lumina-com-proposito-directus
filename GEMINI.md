@@ -1,112 +1,267 @@
-# 🕯️ Velas Lumina com Propósito — Guia da IA
+---
+trigger: always_on
+---
 
-> **Pare aqui e leia antes de qualquer ação.** Este é o ponto de entrada para todas as IAs que trabalham neste projeto.
+# GEMINI.md — AI Rules
+
+> This file defines how **any AI tool** should behave in this workspace.
+> Read the [README.md](./README.md) to understand the project before making any changes.
 
 ---
 
-## 📖 Contexto do Projeto
+## REQUIRED READING (BEFORE ANY ACTION)
 
-Consulte **[README.md](./README.md)** para entender:
-- O que é o projeto (site vitrine de velas artesanais)
-- Stack tecnológica (Next.js 15, Tailwind CSS v4, Directus v11 CMS)
-- Estrutura de diretórios (`app/`, `components/`, `lib/`, `types/`)
-- Como rodar localmente e configurar `.env.local`
+Before writing code, answering questions, or modifying files, the AI **MUST** read:
 
-**Arquivos-chave do CMS:**
-- `lib/directus.ts` — cliente Directus SDK + helper `fileUrl()`
-- `lib/directus/get-products.ts` — `getProducts()` e `getProductBySlug()` com fallback para `lib/data.ts`
+| Priority | File | What it contains |
+|---|---|---|
+| P0 | `GEMINI.md` (this file) | Global behavior rules |
+| P0 | `CLAUDE.md` | Rules for Claude Code (points to AGENTS.md) |
+| P1 | `AGENTS.md` | Agent/skill inventory (`.context/` + `.claude/skills/`) |
+| P1 | `.context/docs/project-overview.md` | Vision, goals, constraints (AI context) |
+| P1 | `.context/docs/architecture.md` | Architecture, layers, ADR history |
+| P2 | `README.md` | Complete project documentation (human devs) |
+| P2 | `.context/docs/` | Full doc set — development-workflow, testing-strategy, security, glossary, tooling |
 
----
-
-## 🧠 AG Kit — Regras e Agentes
-
-Este projeto utiliza o **AG Kit**, um sistema modular de agentes, skills e workflows. Consulte a arquitetura completa em:
-
-📄 **[.agents/ARCHITECTURE.md](./.agents/ARCHITECTURE.md)**
-
-### Regras Globais (PRIORIDADE MÁXIMA)
-
-📄 **[.agents/rules/GEMINI.md](./.agents/rules/GEMINI.md)**
-
-- **TIER 0**: Regras universais — idioma, clean code, dependências, memória
-- **TIER 1**: Regras de código — classificação de requisições, roteamento de agentes, Socratic Gate
-- **TIER 2**: Regras de design — UX/UI, Purple Ban, anti-clichê
-
-> 🔴 **MANDATÓRIO:** Leia `.agents/rules/GEMINI.md` antes de qualquer implementação.
+> **Legacy:** `.agents/` (the custom-built AG Kit — 20 agents, 45 skills, 13 workflow files) predates the `dotcontext` migration (2026-07-06). Kept for history only — `.context/docs/` is now canonical.
 
 ---
 
-## 🤖 Agentes Especialistas (20)
+## ABOUT THIS PROJECT
 
-📂 **[.agents/agent/](./.agents/agent/)**
+**Velas Lumina com Propósito** (brand: Lumina Velas Artesanais) is a catalog/showcase site + WhatsApp-conversion storefront for a handmade, 100% vegetal artisanal candle brand, built with:
 
-| Agente | Domínio |
-|--------|---------|
-| `frontend-specialist` | Web UI/UX, React, Next.js |
-| `backend-specialist` | API, lógica de negócio |
-| `database-architect` | Schema, SQL |
-| `mobile-developer` | iOS, Android, React Native |
-| `devops-engineer` | CI/CD, deploy |
-| `security-auditor` | Segurança, vulnerabilidades |
-| `test-engineer` | Testes, QA |
-| `debugger` | Debugging sistemático |
-| `performance-optimizer` | Performance, Core Web Vitals |
-| `seo-specialist` | SEO, indexação |
-| `orchestrator` | Coordenação multi-agente |
-| `project-planner` | Planejamento, discovery |
-| `documentation-writer` | Documentação |
-| `product-manager` | Requisitos, user stories |
-| `product-owner` | Estratégia, backlog, MVP |
-| `code-archaeologist` | Código legado, refatoração |
-| `explorer-agent` | Análise de codebase |
-| `penetration-tester` | Testes de intrusão |
-| `qa-automation-engineer` | E2E, pipelines CI |
-| `game-developer` | Jogos |
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript 5 (`tsconfig.json` has `"strict": false`), React 19
+- **Styling:** Tailwind CSS v4 (`@tailwindcss/postcss`, CSS-first `@theme` tokens in `app/globals.css`, no `tailwind.config.js`)
+- **CMS:** Directus v11, self-hosted (`directus.luminacomproposito.com.br`), headless, read via `@directus/sdk` (`lib/directus.ts`, static token, REST), no admin route embedded in this app
+- **Auth:** none — no user accounts, no login
+- **Payments:** none — WhatsApp (`wa.me`) is the only conversion channel, no gateway
+- **State:** plain React `useState` in `components/HomeClient.tsx`, persisted manually to `localStorage` (`lumina-velas-cart`) — no state library (no Zustand, no Redux); `SiteSettingsContext` is a thin `React.Context` for CMS-driven settings
+- **UI:** Lucide React icons, Embla Carousel
 
-> O agente correto é selecionado automaticamente pelo protocolo de roteamento em `.agents/rules/GEMINI.md`.
+### App Areas
+
+| Area | Route | Description |
+|---|---|---|
+| Home | `app/page.tsx` | Hero, featured picks, catalog with filter/search, how-it-works, FAQ (Server Component, ISR `revalidate = 3600`, fetches products/categories/faqs/settings from Directus in parallel) |
+| Product detail | `app/produtos/[slug]/page.tsx` | Gallery, specs, WhatsApp CTA, JSON-LD `Product` schema (SSG via `generateStaticParams`) — reads via `getProductBySlug()` from `lib/directus/get-products.ts` (Directus, with `lib/data.ts` fallback) |
+| Privacy policy | `app/privacidade/page.tsx` | Renders the `privacy_policy` singleton's HTML body from Directus |
+
+> For full details, see the [README.md](./README.md) and [.context/docs/project-overview.md](./.context/docs/project-overview.md).
+
+> Note: `components/Customizer.tsx` implements a "Bespoke Lab" candle builder described in `README.md`, but as of 2026-07-06 it is not imported or rendered by any page — verify it's actually wired up before assuming it's a live feature.
 
 ---
 
-## 🧩 Memória Persistente
+## DESIGN CONTEXT
 
-📂 **[.agents/memory/](./.agents/memory/)**
+Frontend/UI work is governed by two files at the project root, generated by the `impeccable` Claude Code skill (`.claude/skills/impeccable/`):
 
-| Arquivo | Conteúdo |
-|---------|----------|
-| [MEMORY.md](./.agents/memory/MEMORY.md) | Índice de memórias do projeto |
-| [project-conventions.md](./.agents/memory/project-conventions.md) | Convenções (branches, commits, padrões) |
+- **[PRODUCT.md](./PRODUCT.md)** — register (`brand`), users, brand personality ("sofisticada, acolhedora, artesanal"), anti-references (marketplace genérico, SaaS frio, luxo exagerado/pretensioso), strategic design principles.
+- **[DESIGN.md](./DESIGN.md)** — visual system: paleta (Terracota Queimada `#904642` + Ivory Quente + Mel Dourado), tipografia (Playfair Display para títulos + DM Sans para corpo), componentes, Do's/Don'ts. Inclui drifts reais encontrados na geração: 3 estilos diferentes de CTA de WhatsApp, tags de aroma estilizadas de 2 formas diferentes, 3 valores de shadow ad-hoc em vez do token `.shadow-ambient`, e um badge "eyebrow" uppercase repetido em quase toda seção.
 
-> 🔴 **MANDATÓRIO:** Leia `.agents/memory/MEMORY.md` ao iniciar cada sessão.
+Read both before any UI/visual change, regardless of which AI tool you are.
 
 ---
 
-## 🔄 Workflows (13 Slash Commands)
+## AGENT SYSTEM (`.context/` + `.claude/skills/`)
 
-📂 **[.agents/workflows/](./.agents/workflows/)**
+This project uses **dotcontext** (`.context/`) as its AI harness, plus **Claude Code skills** in `.claude/skills/`. Full inventory in [AGENTS.md](./AGENTS.md).
 
-| Comando | Propósito |
-|---------|-----------|
-| `/brainstorm` | Discovery socrático |
-| `/coordinate` | Coordenação multi-agente avançada |
-| `/create` | Criar novas features |
-| `/debug` | Depurar problemas |
-| `/deploy` | Deploy da aplicação |
-| `/enhance` | Melhorar código existente |
-| `/orchestrate` | Orquestração multi-agente |
-| `/plan` | Planejamento de tarefas |
-| `/preview` | Preview de alterações |
-| `/remember` | Salvar na memória persistente |
-| `/status` | Verificar status do projeto |
-| `/test` | Executar testes |
-| `/verify` | Verificar alterações em execução |
+- **11 Agent Playbooks** in `.context/agents/`
+- **9 Skills** (incl. PREVC workflow) in `.context/skills/`
+- **15 Claude Code Skills** (14 from `@tech-leads-club/agent-skills` + `impeccable`) in `.claude/skills/`
+- **dotcontext MCP tools** (if configured user-side): `context`, `explore`, `sync`, `agent`, `skill`, `harness`, `workflow-init/advance/status/guide`
 
----
+> `.agents/` (the previous custom kit — 20 agents, 45 skills, 13 workflow files) is now legacy. Its `workflows/*.md` files still work as prompt-driven conventions for tools without native skill/MCP support (an AI reading this file can still honor `/create`, `/debug`, etc. by consulting `.agents/workflows/<name>.md` on request), but new work should use `.context/` and `.claude/skills/` instead.
 
-## 🚀 Início Rápido
+### Structure
 
-```bash
-npm install
-# Configure .env.local com NEXT_PUBLIC_DIRECTUS_URL e DIRECTUS_TOKEN
-npm run dev        # http://localhost:3001
-npm run lint       # Verificação de código
 ```
+.context/
+├── docs/            # Canonical documentation (project-overview, architecture, testing, security...)
+├── agents/          # 11 agent playbooks (frontend-specialist, architect-specialist, bug-fixer...)
+├── skills/          # 9 skills (commit-message, code-review, test-generation, security-audit...)
+├── plans/           # PREVC plans (created via workflow-init)
+├── config/          # policy.json, sensors.json (build/lint checks)
+└── runtime/         # Generated state (gitignored)
+
+.claude/skills/       # 15 Claude Code skills (impeccable, seo, react-best-practices, vercel-deploy, playwright-skill...)
+```
+
+### Loading Protocol
+
+```
+User request
+    ↓
+Read .context/docs/ for project context
+    ↓
+Select relevant agent playbook (.context/agents/) or Claude Code skill (.claude/skills/)
+    ↓
+Apply guidance → Execute task
+    ↓
+Update `.context/docs/` if something changed; **antes de commitar**, atualize o `CHANGELOG.md` se a mudança for importante (visual, arquitetural, nova feature, performance, SEO) — crie o arquivo se ainda não existir. Mudanças não importantes (comentário, refactor sem efeito visível) não exigem changelog.
+```
+
+### Most Relevant Agents for This Project
+
+| Agent | When to Use |
+|---|---|
+| `frontend-specialist` | UI/UX, React components, cart UI, product gallery |
+| `architect-specialist` | Directus/Next.js boundary, ADRs, layering decisions |
+| `bug-fixer` | Bugs — check Directus content before assuming it's code |
+| `security-auditor` | Secret scoping, trusted-HTML rendering |
+| `test-writer` | Bootstrapping Vitest/Playwright from 0% coverage |
+| `devops-specialist` | Vercel deploy, env vars |
+
+---
+
+## GLOBAL BEHAVIOR RULES
+
+> These are the **canonical global rules** (single source of truth). The operational behavior engine — request classifier, intelligent agent routing, TIER protocol, Socratic Gate and the script checklist — lives in [`.agents/rules/GEMINI.md`](./.agents/rules/GEMINI.md) and defers to the rules below for language and clean code.
+
+### Language
+
+- The project's primary language is **Brazilian Portuguese (pt-BR)**
+- Responses to the user: **in Portuguese**
+- Code (variables, functions, comments): **in English**
+
+### Clean Code
+
+- Concise, self-documenting code
+- No over-engineering or unnecessary abstractions
+- Follow patterns already established in the codebase
+- `tsconfig.json` currently has `"strict": false` — don't introduce new `any` without justification, but don't assume stricter null-checking than the codebase already has
+- Imports with `@/` alias (configured in tsconfig)
+
+### Before Modifying Any File
+
+1. **Read** the file before editing
+2. **Understand** the context and dependencies
+3. **Preserve** existing patterns (imports, naming, style)
+4. **Mentally test** the impact on other files
+
+### Environment Variables
+
+- **NEVER** expose secrets/keys in code
+- **NEVER** commit `.env` or `.env.local` (both gitignored; `.env.local` holds `DIRECTUS_TOKEN`) — only `.env.example` (a placeholder template, no real values) is committed; this also applies to MCP config files (`.agents/mcp_config.json` once leaked a Directus MCP access token in commit `e5aeb54` — see `.context/docs/security.md`; `**/mcp_config.json`/`.mcp.json` are now gitignored)
+- Use `process.env.VARIABLE` on the server
+- Use `NEXT_PUBLIC_` prefix only for client-side variables
+- See [`.env.example`](./.env.example) for the full variable list, and [`.context/docs/development-workflow.md`](./.context/docs/development-workflow.md) for what each one does
+
+### Content (Directus CMS — no database in this repo)
+
+- There is no application database or ORM — all content lives in a self-hosted Directus v11 instance (`directus.luminacomproposito.com.br`), read via `@directus/sdk`
+- All Directus queries go through `lib/directus/get-*.ts` (never call `directus.request()` inline elsewhere)
+- Schema (`products`, `categories`, `faqs` collections + `site_settings`/`privacy_policy` singletons) lives in the Directus instance itself, not as code in this repo; `scripts/setup-directus-content.mjs` provisions/re-applies it idempotently via the Directus REST API
+- The `category` field is now a free-form string sourced from the Directus `categories` collection (seeded as `velas` / `arranjos` / `kits`), not a hand-duplicated TS union — `types/types.ts`'s `Product.category` is just `string`
+
+### Authentication
+
+- There is no user authentication in this app — no login, no sessions, no protected routes
+- The app reads Directus with a static access token (`DIRECTUS_TOKEN`, via `staticToken()` in `lib/directus.ts`) — confirm which token is in `.env.local` before assuming it's read-only (see `.context/docs/security.md`)
+- `DIRECTUS_TOKEN` is confined to `.env.local` and consumed only server-side (`lib/directus.ts`, `scripts/setup-directus-content.mjs`) — never in `app/`/`components/` client code and never with a `NEXT_PUBLIC_` prefix
+
+---
+
+## HOW EACH TOOL SHOULD USE THIS FILE
+
+### Gemini CLI / Gemini Code Assist
+
+The **Gemini CLI** (`gemini`) and **Gemini Code Assist** automatically read the `GEMINI.md` in the project root as context instructions.
+
+**Expected behavior:**
+1. Read this file at the start of each session
+2. Apply the global rules defined above
+3. Consult `.context/agents/` for playbooks, or the legacy `.agents/agent/` if `.context/` is unavailable
+4. Consult `.agents/workflows/` for pseudo-commands via `/command` (prompt-driven convention, not a native integration)
+5. Respond in the project's primary language
+
+### Claude Code
+
+**Claude Code** reads the `CLAUDE.md` in the project root. The `CLAUDE.md` file references `AGENTS.md`, which documents `.context/agents/`, `.context/skills/`, and the native `.claude/skills/` (installed via `@tech-leads-club/agent-skills` + `impeccable`).
+
+**Expected behavior:**
+1. Read `CLAUDE.md` -> follows to `AGENTS.md`
+2. `AGENTS.md` documents agent playbooks (`.context/agents/`) and skills (`.context/skills/`, `.claude/skills/`)
+3. Apply the same global rules from this `GEMINI.md`
+4. Use `.claude/skills/` naturally (Claude Code auto-discovers them); consult `.context/agents/` playbooks for role-specific guidance
+5. Respond in the project's primary language
+
+### Antigravity Chat (Google)
+
+**Antigravity** reads `GEMINI.md` as a user rule. It also has access to the legacy skill system in `.agents/` (dotcontext's `.context/` is not yet a native Antigravity surface).
+
+**Expected behavior:**
+1. This file is loaded as `user_rules`
+2. Must follow the intelligent agent routing protocol
+3. Available skills are listed automatically
+4. Available workflows are listed automatically
+5. Respond in the project's primary language
+
+### OpenCode
+
+**OpenCode** (`opencode`) reads instructions from `opencode.jsonc` for MCPs, but also respects `AGENTS.md` and `GEMINI.md` when mentioned by the user.
+
+**Expected behavior:**
+1. Read `AGENTS.md` when mentioned via `@AGENTS.md`
+2. Use MCPs configured in `opencode.jsonc` or `.mcp.json` (neither exists in this repo today)
+3. Apply the same global rules from this `GEMINI.md`
+4. Respond in the project's primary language
+
+### Cursor / Windsurf / Others
+
+Any other AI IDE should:
+1. Read this `GEMINI.md` as project rules
+2. Read `AGENTS.md` to understand the agent system
+3. Consult `README.md` for project context
+4. Follow the same rules defined above
+
+---
+
+## AVAILABLE WORKFLOWS (legacy)
+
+Prompt-driven pseudo-commands from the legacy `.agents/` kit — not native slash commands in Claude Code (no `.claude/commands/` exists), but any AI reading this file can still honor them by opening the referenced file on request:
+
+| Command | File | Description |
+|---|---|---|
+| `/brainstorm` | `.agents/workflows/brainstorm.md` | Socratic Discovery |
+| `/coordinate` | `.agents/workflows/coordinate.md` | Coordinate multiple agents |
+| `/create` | `.agents/workflows/create.md` | Create new feature |
+| `/debug` | `.agents/workflows/debug.md` | Debug issues |
+| `/deploy` | `.agents/workflows/deploy.md` | Deploy to production |
+| `/enhance` | `.agents/workflows/enhance.md` | Improve existing code |
+| `/orchestrate` | `.agents/workflows/orchestrate.md` | Orchestrate multi-agent execution |
+| `/plan` | `.agents/workflows/plan.md` | Plan tasks |
+| `/preview` | `.agents/workflows/preview.md` | Preview server |
+| `/remember` | `.agents/workflows/remember.md` | Persist project memory |
+| `/status` | `.agents/workflows/status.md` | Project status |
+| `/test` | `.agents/workflows/test.md` | Run tests |
+| `/verify` | `.agents/workflows/verify.md` | Verify a change actually works |
+
+---
+
+## FINAL CHECKLIST
+
+Before considering a task complete:
+
+- [ ] Code compiles without errors (`npm run build`)
+- [ ] TypeScript has no compiler errors under the current config (`strict: false`)
+- [ ] Project patterns maintained
+- [ ] Sensitive variables not exposed
+- [ ] CHANGELOG.md atualizado se a mudança for importante (visual, arquitetural, nova feature, performance, SEO) — crie o arquivo se ainda não existir
+- [ ] Response in the project's primary language
+
+---
+
+> **References:**
+> - Project documentation (human devs): [README.md](./README.md)
+> - Project vision (AI context): [.context/docs/project-overview.md](./.context/docs/project-overview.md)
+> - Architecture & ADRs: [.context/docs/architecture.md](./.context/docs/architecture.md)
+> - Design context: [PRODUCT.md](./PRODUCT.md), [DESIGN.md](./DESIGN.md)
+> - Full doc set: [.context/docs/](./.context/docs/)
+> - Agent system: [AGENTS.md](./AGENTS.md)
+> - Claude Code instructions: [CLAUDE.md](./CLAUDE.md)
+> - Legacy behavior engine (still valid for non-dotcontext tools): [.agents/rules/GEMINI.md](./.agents/rules/GEMINI.md)
+> - Legacy kit architecture: [.agents/ARCHITECTURE.md](./.agents/ARCHITECTURE.md)
