@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
         hostname: 'lh3.googleusercontent.com',
       },
       {
-        protocol: 'http',
+        protocol: 'https',
         hostname: 'directus.luminacomproposito.com.br',
       },
     ],

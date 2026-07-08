@@ -1,0 +1,13 @@
+# Lumina Velas Artesanais
+
+> Velas artesanais 100% vegetais, feitas à mão em Florianópolis (SC), com aromas exclusivos. Não há carrinho de pagamento no site: cada pedido é fechado por mensagem direta no WhatsApp, combinando entrega e forma de pagamento com a marca.
+
+## Key pages
+
+- [Catálogo e vitrine principal](https://velasartesanais.luminacomproposito.com.br/): página inicial com todo o catálogo de velas, categorias, como funciona o pedido via WhatsApp e perguntas frequentes.
+- [Política de Privacidade](https://velasartesanais.luminacomproposito.com.br/privacidade): como os dados de contato/pedido informados no site são tratados.
+- Páginas de produto individuais ficam em `/produtos/{slug}` (ex.: `/produtos/rosa-imperial`) — a lista completa e atualizada está no sitemap abaixo.
+
+## Technical files
+
+- [Sitemap](https://velasartesanais.luminacomproposito.com.br/sitemap.xml): lista completa de URLs indexadas, incluindo todas as páginas de produto.

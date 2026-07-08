@@ -15,6 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Política de Privacidade | ${settings.brand_name}`,
     description: `Leia nossa política de privacidade e saiba como protegemos seus dados.`,
+    alternates: {
+      canonical: '/privacidade',
+    },
   };
 }
 

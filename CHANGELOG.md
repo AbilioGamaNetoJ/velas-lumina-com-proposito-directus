@@ -4,6 +4,26 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
 ## [Não lançado]
 
+### Adicionado (SEO + GEO)
+
+- **Sitemap dinâmico via ISR** (`app/sitemap.ts`): substitui por completo o `next-sitemap` (pacote removido de `package.json`/`package-lock.json`, `postbuild` removido, `next-sitemap.config.cjs` deletado). Antes, os três arquivos gerados (`public/sitemap.xml`, `public/sitemap-0.xml`, `public/robots.txt`) ficavam commitados no git com o domínio do build local (`http://localhost:3001`) — confirmado servindo isso **em produção** (`https://velasartesanais.luminacomproposito.com.br/sitemap.xml` retornava `localhost`), impedindo o Google Search Console de descobrir qualquer URL do site. Agora o sitemap é gerado pelo App Router nativo do Next.js com `revalidate = 3600` — novos produtos cadastrados no Directus são incluídos automaticamente em até 1 hora, sem build/redeploy, e o domínio vem sempre de `SITE_URL` em tempo de request (sem risco de artefato estático desatualizado ir parar no git de novo). **Pendente:** confirmar a env var `SITE_URL=https://velasartesanais.luminacomproposito.com.br` no ambiente de Production da Vercel.
+- **`robots.ts` dinâmico** (`app/robots.ts`): substitui o `public/robots.txt` estático que apontava para `localhost` em produção. Agora usa `SITE_URL` corretamente. Inclui permissão explícita para crawlers de IA (`GPTBot`, `Claude-Web`, `PerplexityBot`) para favorecer citações em ferramentas de GEO (Perplexity, ChatGPT, Claude, Gemini).
+- **Schema `Organization`** no layout raiz: informa ao Google nome da marca, URL, logo e Instagram — essencial para o Knowledge Panel.
+- **Schema `WebSite`** no layout raiz: identifica a marca como entidade (nome, URL, descrição, idioma) para o Google.
+- **Schema `FAQPage`** na home (`app/page.tsx`): indexa as perguntas frequentes como rich results no Google e aumenta taxa de citação em IAs como Perplexity e ChatGPT.
+- **Schema `LocalBusiness`** na home: endereço (Florianópolis/SC), telefone (WhatsApp), horário de funcionamento e links sociais — fundamental para aparecer no Google Maps e buscas com intenção local ("velas artesanais Florianópolis").
+- **Schema `BreadcrumbList`** na página de produto: melhora a navegação nos rich results do Google.
+- **Schema `Product` enriquecido**: adicionados `brand` e `seller` ao schema existente — aumenta confiança e elegibilidade para rich results de produto.
+- **OG image com URL absoluta garantida**: tanto no layout raiz quanto na página de produto, a OG image agora sempre tem URL absoluta (Directus ou fallback `SITE_URL/images/lumina-velas.jpeg`), corrigindo pré-visualizações quebradas no WhatsApp e redes sociais.
+- **Keywords e `authors`** no metadata do layout raiz.
+- **`alternates.canonical`** em cada página de produto, evitando conteúdo duplicado percebido pelo Google.
+
+
+
+### Modificado
+
+- `scripts/setup-directus-content.mjs`: Atualizado para incluir traduções de rótulos dos campos (`pt-BR`) de todas as coleções (`categories`, `site_settings`, `faqs`, `privacy_policy` e `products`) via metadados da API de campos, de forma a aplicar atualizações (`PATCH /fields`) de maneira idempotente para campos novos e existentes.
+
 ### Corrigido
 
 - Documentação para IA (`.context/docs/*.md`, `.context/agents/*.md`, `.context/skills/*/SKILL.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) atualizada para refletir a migração do CMS de Sanity para Directus v11, concluída em 2026-06-27/28 mas nunca reconciliada nesses arquivos (alguns chegavam a afirmar o oposto da realidade). Detalhes: env vars (`NEXT_PUBLIC_DIRECTUS_URL`/`DIRECTUS_TOKEN` em vez de `SANITY_*`), camada de dados (`lib/directus/get-*.ts`), schema (collections/singletons Directus em vez de `sanity/schemaTypes/`), remoção de referências à rota `/studio` (não existe mais), e correção do risco #1 do `architecture.md` (produto detail já lê do CMS via `getProductBySlug()`).
@@ -13,6 +33,8 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 - `app/produtos/[slug]/page.tsx` não tinha `export const revalidate` (diferente de `app/page.tsx`, que já usa `revalidate = 3600`) — como página estática gerada via `generateStaticParams`, ficava em cache indefinidamente até o próximo deploy, então editar um produto no Directus nunca chegava a essa página sem redeploy. Também não envolvia a árvore em `SiteSettingsProvider`, então o CTA de WhatsApp nessa rota usava o número/mensagem padrão hardcoded (`SiteSettingsContext.tsx`) em vez dos valores reais cadastrados em `site_settings`.
 - Preço e nome de itens já salvos no carrinho (`localStorage`) ficavam congelados no valor do momento em que foram adicionados — uma edição de preço/nome no Directus não chegava a um carrinho já existente nem na mensagem de pedido enviada por WhatsApp. Corrigido pela reconciliação em `lib/use-cart.ts` (ver Adicionado).
 - `components/WhatsAppCTA.tsx` usava `bg-green-600` (verde da marca do WhatsApp), inconsistente com o restante do site — padronizado para `bg-primary`, conforme já documentado como drift em `DESIGN.md` ("Don't duplicate the WhatsApp CTA style").
+- `app/produtos/[slug]/page.tsx`: o bloco `openGraph` da página de produto substituía por completo o do layout raiz, perdendo `siteName`, `locale`, `type` e `url` — agora declarados explicitamente, garantindo pré-visualização de link completa (relevante porque o link de produto é o que costuma ser encaminhado no WhatsApp).
+- `next.config.ts`: `remotePatterns` declarava o host do Directus (`directus.luminacomproposito.com.br`) com `protocol: 'http'`, divergente do `NEXT_PUBLIC_DIRECTUS_URL` real (`https://...`). Não quebrava nada hoje porque nenhuma imagem de produto usa `next/image`, mas bloquearia silenciosamente essas imagens no dia em que migrarem para o componente `<Image>`. Corrigido para `https`.
 
 ### Adicionado
 
@@ -23,6 +45,7 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 - Selo "Esgotado" com overlay em cinza na imagem e botão "Avise-me" (mensagem de WhatsApp dedicada) quando `in_stock` é `false` no Directus. Produtos sem estoque agora aparecem no catálogo (antes eram ocultados por completo pelo filtro `in_stock: { _eq: true }` em `getProducts()`) — badge "Destaque" e "Esgotado" empilham quando ambos se aplicam.
 - Hook compartilhado `lib/use-cart.ts` (estado do carrinho + persistência em `localStorage` + reconciliação): ao carregar, cada item do carrinho é re-sincronizado contra a lista atual de produtos do Directus, por `directusId` (chave estável) com fallback pro slug antigo. Preço e nome desatualizados são corrigidos automaticamente; itens cujo produto foi removido do Directus são marcados `unavailable` e excluídos do total/mensagem, sem serem apagados silenciosamente do carrinho do visitante.
 - `lib/whatsapp.ts`: novos builders `buildCartOrderMessage()` (mensagem de pedido do carrinho, antes montada ad-hoc dentro de `CartDrawer.tsx`) e o parâmetro `notifyMe` (mensagem de "avise-me" para produtos esgotados) — centraliza toda a geração de texto do WhatsApp num único lugar.
+- `public/llms.txt` — resumo da marca e do catálogo para agentes de IA (convenção da comunidade `llms.txt`; não substitui nem controla o `robots.txt`).
 - `scripts/setup-directus-content.mjs`: nova etapa `configureProductSlugAutomation()` cria (idempotente) um Flow no Directus para gerar o `slug` de `products` automaticamente a partir do `name` a cada criação/edição. **Ainda não está ativo em produção** — criado com `status: "inactive"` porque a mutação do payload pela operação não estava sendo aplicada nos testes manuais, mesmo com a configuração documentada (`trigger: "hook"`, `options.type: "filter"`, `options.return: "$last"`, `accountability: "$full"`); precisa ser depurado no editor visual do Directus (Configurações → Flows) antes de ativar. O campo `slug` permanece editável manualmente até lá. Rótulos em português (`meta.translations`) para os campos de `products` já existiam previamente na instância — nenhuma ação necessária.
 
 ### Segurança

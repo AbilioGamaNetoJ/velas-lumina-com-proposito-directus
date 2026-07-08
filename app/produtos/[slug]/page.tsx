@@ -8,6 +8,8 @@ import ProductPageClient from '@/components/ProductPageClient';
 
 export const revalidate = 3600;
 
+const SITE_URL = process.env.SITE_URL || 'https://velasartesanais.luminacomproposito.com.br';
+
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -29,13 +31,28 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
+  const productUrl = `${SITE_URL}/produtos/${resolvedParams.slug}`;
+  const ogImage = product.image || `${SITE_URL}/images/lumina-velas.jpeg`;
+
   return {
-    title: `${product.name} | Lumina Velas Artesanais`,
+    title: product.name,
     description: product.description,
+    alternates: {
+      canonical: productUrl,
+    },
     openGraph: {
+      type: 'website',
+      locale: 'pt_BR',
+      url: productUrl,
       title: product.name,
       description: product.description,
-      images: [product.image],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: product.name }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: product.description,
+      images: [ogImage],
     },
   };
 }
@@ -56,12 +73,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const otherProducts = allProducts.filter((p) => p.id !== product.id && p.category !== product.category);
   const relatedProducts = [...sameCategory, ...otherProducts].slice(0, 4);
 
-  const jsonLd = {
+  const productUrl = `${SITE_URL}/produtos/${product.id}`;
+
+  const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
     image: product.image,
     description: product.description,
+    brand: {
+      '@type': 'Brand',
+      name: settings.brand_name,
+    },
     offers: {
       '@type': 'Offer',
       price: product.price.toFixed(2),
@@ -69,15 +92,48 @@ export default async function ProductPage({ params }: ProductPageProps) {
       availability: product.inStock === false
         ? 'https://schema.org/OutOfStock'
         : 'https://schema.org/InStock',
-      url: `https://velasartesanais.luminacomproposito.com.br/produtos/${product.id}`,
+      url: productUrl,
+      seller: {
+        '@type': 'Organization',
+        name: settings.brand_name,
+      },
     },
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Início',
+        item: SITE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Produtos',
+        item: `${SITE_URL}/#produtos`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.name,
+        item: productUrl,
+      },
+    ],
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <SiteSettingsProvider settings={settings}>
