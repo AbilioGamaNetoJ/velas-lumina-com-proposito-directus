@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import { DM_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { getSiteSettings } from '@/lib/directus/get-site-settings';
+import { getProducts } from '@/lib/directus/get-products';
+import { CartProvider } from '@/components/CartContext';
+
+export const revalidate = 3600;
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -66,15 +70,17 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const products = await getProducts();
+
   return (
     <html lang="pt-BR">
       <body className={`${dmSans.variable} ${playfairDisplay.variable} antialiased`} suppressHydrationWarning>
-        {children}
+        <CartProvider products={products}>{children}</CartProvider>
       </body>
     </html>
   );

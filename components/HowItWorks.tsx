@@ -30,6 +30,7 @@ const steps = [
     icon: WhatsAppIcon,
     title: 'Finalize pelo WhatsApp',
     description: 'Sua mensagem chega organizada com os produtos escolhidos. Combinamos entrega e pagamento.',
+    highlight: true,
   },
   {
     number: '04',
@@ -60,26 +61,45 @@ export default function HowItWorks() {
         </ScrollReveal>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          <div className="hidden lg:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-high-blush/60 z-0" />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-8 relative">
+          {/* Connecting line — passes through the center of the (larger) WhatsApp icon, every other icon aligns to it */}
+          <div className="hidden lg:block absolute top-14 left-[12.5%] right-[12.5%] h-0.5 bg-primary/25 z-0" />
+          <div className="lg:hidden absolute top-0 bottom-0 left-14 w-0.5 bg-primary/25 z-0" />
 
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
-              <ScrollReveal 
-                key={step.number} 
+              <ScrollReveal
+                key={step.number}
                 animation="fade-in-right"
-                delay={index * 200}
-                className="relative flex flex-col items-center text-center z-10"
+                delay={index * 150}
+                className="relative z-10 flex items-center gap-5 lg:flex-col lg:items-center lg:text-center lg:gap-0"
               >
-                <div className="w-20 h-20 rounded-full bg-white border-2 border-high-blush/40 shadow-sm flex items-center justify-center mb-4 relative">
-                  <Icon className="w-7 h-7 text-primary" />
-                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                    {step.number}
-                  </span>
+                {/* Fixed-size slot keeps every icon's center on the same line, regardless of its own diameter */}
+                <div className="w-28 h-28 shrink-0 flex items-center justify-center lg:mb-4">
+                  <div
+                    className={
+                      step.highlight
+                        ? 'w-24 h-24 rounded-full bg-primary shadow-ambient flex items-center justify-center relative'
+                        : 'w-20 h-20 rounded-full bg-white border-2 border-high-blush/40 shadow-sm flex items-center justify-center relative'
+                    }
+                  >
+                    <Icon className={step.highlight ? 'w-9 h-9 text-white' : 'w-7 h-7 text-primary'} />
+                    <span
+                      className={
+                        step.highlight
+                          ? 'absolute -top-2 -right-2 w-7 h-7 bg-dark-brown text-white text-xs font-bold rounded-full flex items-center justify-center'
+                          : 'absolute -top-2 -right-2 w-6 h-6 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center'
+                      }
+                    >
+                      {step.number}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="font-editorial text-base font-bold text-dark-brown mb-2">{step.title}</h3>
-                <p className="text-muted-brown text-xs leading-relaxed max-w-[200px]">{step.description}</p>
+                <div>
+                  <h3 className="font-editorial text-base font-bold text-dark-brown mb-1 lg:mb-2">{step.title}</h3>
+                  <p className="text-muted-brown text-xs leading-relaxed lg:max-w-[200px]">{step.description}</p>
+                </div>
               </ScrollReveal>
             );
           })}

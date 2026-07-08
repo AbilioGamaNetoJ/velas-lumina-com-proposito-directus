@@ -5,6 +5,7 @@
 
 export interface Product {
   id: string;
+  directusId?: string | number;
   name: string;
   subtitle: string;
   description: string;
@@ -20,6 +21,7 @@ export interface Product {
     essenceStrength?: 'Suave' | 'Média' | 'Intensa';
   };
   featured?: boolean;
+  inStock?: boolean;
 }
 
 export interface Category {
@@ -60,4 +62,5 @@ export interface CartItem {
   product: Product;
   quantity: number;
   priceAtAddition: number;
+  unavailable?: boolean;
 }

@@ -14,7 +14,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 import { CartItem } from '@/types/types';
-import { buildWhatsAppURL } from '@/lib/whatsapp';
+import { buildWhatsAppURL, buildCartOrderMessage } from '@/lib/whatsapp';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
 
 interface CartDrawerProps {
@@ -26,24 +26,22 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem }: CartDrawerProps) {
-  const subtotal = cartItems.reduce((acc, item) => acc + (item.priceAtAddition * item.quantity), 0);
+  const availableItems = cartItems.filter((item) => item.product.inStock !== false && !item.unavailable);
+  const subtotal = availableItems.reduce((acc, item) => acc + (item.priceAtAddition * item.quantity), 0);
   const settings = useSiteSettings();
 
   const handleCheckout = () => {
-    if (cartItems.length === 0) return;
+    if (availableItems.length === 0) return;
 
-    const brandName = settings.brand_name;
-    let msg = `*${brandName} - Meu Pedido*\n\n`;
-    msg += `Olá, vim do site da ${brandName} e gostaria de fazer um pedido!\n\n`;
-    
-    cartItems.forEach((item, index) => {
-      msg += `*${index + 1}. ${item.product.name}*\n`;
-      msg += `   - Categoria: ${item.product.category}\n`;
-      msg += `   - Qtd: ${item.quantity}x de R$ ${item.priceAtAddition.toFixed(2)}\n\n`;
-    });
-
-    msg += `---------------------------------\n`;
-    msg += `*Valor Total Estimado: R$ ${subtotal.toFixed(2)}*`;
+    const msg = buildCartOrderMessage(
+      settings.brand_name,
+      availableItems.map((item) => ({
+        name: item.product.name,
+        category: item.product.category,
+        quantity: item.quantity,
+        price: item.priceAtAddition,
+      }))
+    );
 
     const whatsappUrl = buildWhatsAppURL({ customMessage: msg, number: settings.whatsapp_number });
     window.open(whatsappUrl, '_blank');
@@ -101,15 +99,18 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                   </div>
                 ) : (
                   <div className="divide-y divide-high-blush/30">
-                    {cartItems.map((item) => (
-                      <div key={item.id} className="py-4 flex gap-4 first:pt-0 last:pb-0 text-left">
-                        
+                    {cartItems.map((item) => {
+                      const soldOut = item.product.inStock === false;
+                      const disabled = soldOut || item.unavailable;
+                      return (
+                      <div key={item.id} className={`py-4 flex gap-4 first:pt-0 last:pb-0 text-left ${disabled ? 'opacity-60' : ''}`}>
+
                         {/* Item image */}
                         <div className="w-20 h-20 bg-soft-blush rounded-xl overflow-hidden shrink-0 flex items-center justify-center border border-high-blush/20">
                           <img
                             src={item.product.image}
                             alt={item.product.name}
-                            className="w-full h-full object-cover"
+                            className={`w-full h-full object-cover ${disabled ? 'grayscale' : ''}`}
                           />
                         </div>
 
@@ -128,10 +129,20 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                                 <Trash2 className="w-4 h-4 shrink-0" />
                               </button>
                             </div>
-                            
-                            <p className="text-[10px] uppercase tracking-wider font-bold text-primary mt-0.5">
-                              {item.product.category}
-                            </p>
+
+                            {item.unavailable ? (
+                              <p className="text-[10px] uppercase tracking-wider font-bold text-red-600 mt-0.5">
+                                Não está mais disponível — remova para continuar
+                              </p>
+                            ) : soldOut ? (
+                              <p className="text-[10px] uppercase tracking-wider font-bold text-red-600 mt-0.5">
+                                Esgotado — remova para continuar
+                              </p>
+                            ) : (
+                              <p className="text-[10px] uppercase tracking-wider font-bold text-primary mt-0.5">
+                                {item.product.category}
+                              </p>
+                            )}
                           </div>
 
                           {/* Quantities indicator and price */}
@@ -140,7 +151,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                               <button
                                 onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
                                 className="p-1 hover:bg-soft-blush text-muted-brown rounded-md transition-colors shrink-0 disabled:opacity-40 cursor-pointer"
-                                disabled={item.quantity <= 1}
+                                disabled={item.quantity <= 1 || disabled}
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
@@ -149,12 +160,13 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                               </span>
                               <button
                                 onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                                className="p-1 hover:bg-soft-blush text-muted-brown rounded-md transition-colors shrink-0 cursor-pointer"
+                                className="p-1 hover:bg-soft-blush text-muted-brown rounded-md transition-colors shrink-0 disabled:opacity-40 cursor-pointer"
+                                disabled={disabled}
                               >
                                 <Plus className="w-3.5 h-3.5" />
                               </button>
                             </div>
-                            
+
                             <span className="font-semibold text-primary text-sm">
                               R$ {(item.priceAtAddition * item.quantity).toFixed(2)}
                             </span>
@@ -163,7 +175,8 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                         </div>
 
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -184,7 +197,8 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                   <button
                     onClick={handleCheckout}
                     id="cart-checkout-btn"
-                    className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-medium text-sm tracking-wide py-4 rounded-xl shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                    disabled={availableItems.length === 0}
+                    className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-medium text-sm tracking-wide py-4 rounded-xl shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0"
                   >
                     <WhatsAppIcon className="w-4 h-4" />
                     Enviar Pedido via WhatsApp

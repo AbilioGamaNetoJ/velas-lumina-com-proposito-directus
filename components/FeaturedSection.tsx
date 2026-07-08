@@ -14,11 +14,10 @@ import ScrollReveal from './ScrollReveal';
 
 interface Props {
   featuredProducts: Product[];
-  onSelectProduct: (product: Product) => void;
   onAddToCart: (product: Product) => void;
 }
 
-export default function FeaturedSection({ featuredProducts, onSelectProduct, onAddToCart }: Props) {
+export default function FeaturedSection({ featuredProducts, onAddToCart }: Props) {
   const [currentMonth, setCurrentMonth] = useState('');
 
   useEffect(() => {
@@ -56,10 +55,9 @@ export default function FeaturedSection({ featuredProducts, onSelectProduct, onA
         <ProductCarousel>
           {featuredProducts.map((prod) => (
             <div className="h-full" key={`featured-${prod.id}`}>
-              <ProductCard 
-                product={prod} 
-                onSelect={onSelectProduct} 
-                onAddToCart={onAddToCart} 
+              <ProductCard
+                product={prod}
+                onAddToCart={onAddToCart}
               />
             </div>
           ))}

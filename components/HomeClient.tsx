@@ -5,19 +5,19 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import FeaturedSection from '@/components/FeaturedSection';
 import ProductCard from '@/components/ProductCard';
-import ProductDetailModal from '@/components/ProductDetailModal';
 import ScrollReveal from '@/components/ScrollReveal';
 import HowItWorks from '@/components/HowItWorks';
 import FaqSection from '@/components/Faq';
 import ProductCarousel from '@/components/ProductCarousel';
 import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
-import { Product, Category, Faq, CartItem } from '@/types/types';
+import { useCartContext } from '@/components/CartContext';
+import { Product, Category, Faq } from '@/types/types';
 import { Search, AlertCircle, ArrowRight } from 'lucide-react';
 
 export default function HomeClient({
@@ -29,36 +29,11 @@ export default function HomeClient({
   categories: Category[];
   faqs: Faq[];
 }) {
-  // Navigation & Drawer states
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
   // Filtering & Catalog states
   const [activeCategory, setActiveCategory] = useState<string>('todas');
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Cart state — hydrates empty to avoid SSR mismatch, then loads from localStorage
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  useEffect(() => {
-    try {
-      const persisted = localStorage.getItem('lumina-velas-cart');
-      if (persisted) {
-        setCartItems(JSON.parse(persisted));
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
-
-  // Persist cart updates
-  useEffect(() => {
-    try {
-      localStorage.setItem('lumina-velas-cart', JSON.stringify(cartItems));
-    } catch (e) {
-      // safe backup omission
-    }
-  }, [cartItems]);
+  const { cartItems, addToCart, updateQuantity, removeItem, cartCount, isCartOpen, openCart, closeCart } = useCartContext();
 
   const handleGoToSection = (id: string) => {
     if (id === 'contato') {
@@ -84,40 +59,6 @@ export default function HomeClient({
     }
   };
 
-  // Cart operations
-  const handleAddToCart = (product: Product) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.product?.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.product?.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prev, {
-        id: `standard-${product.id}-${Date.now()}`,
-        product,
-        quantity: 1,
-        priceAtAddition: product.price
-      }];
-    });
-    
-    // Auto-open shopping slide to confirm insertion feedback
-    setIsCartOpen(true);
-  };
-
-  const handleUpdateQuantity = (itemId: string, newQty: number) => {
-    if (newQty < 1) return;
-    setCartItems((prev) => 
-      prev.map((item) => item.id === itemId ? { ...item, quantity: newQty } : item)
-    );
-  };
-
-  const handleRemoveItem = (itemId: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
-  };
-
   // Filter products list based on search and selected filter tab
   const filteredProducts = products.filter((p) => {
     const matchesCategory = activeCategory === 'todas' || p.category === activeCategory;
@@ -129,29 +70,26 @@ export default function HomeClient({
     return matchesCategory && matchesSearch;
   });
 
-  const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-
   return (
     <div className="bg-warm-bg min-h-screen flex flex-col font-sans select-none antialiased">
       
       {/* Sticky frosted header */}
-      <Header 
-        cartCount={cartCount} 
-        onOpenCart={() => setIsCartOpen(true)} 
-        onGoToSection={handleGoToSection} 
+      <Header
+        cartCount={cartCount}
+        onOpenCart={openCart}
+        onGoToSection={handleGoToSection}
       />
 
       {/* Main Container */}
       <main className="flex-grow">
-        
+
         {/* Hero Section */}
         <Hero onExplore={() => handleGoToSection('produtos')} />
 
         {/* Dynamic Featured Section (products with featured: true) */}
-        <FeaturedSection 
-          featuredProducts={products.filter(p => p.featured)} 
-          onSelectProduct={setSelectedProduct} 
-          onAddToCart={handleAddToCart} 
+        <FeaturedSection
+          featuredProducts={products.filter(p => p.featured)}
+          onAddToCart={addToCart}
         />
 
         {/* Collection Section */}
@@ -228,10 +166,9 @@ export default function HomeClient({
               <ProductCarousel>
                   {filteredProducts.map((prod) => (
                     <div className="h-full" key={prod.id}>
-                      <ProductCard 
-                        product={prod} 
-                        onSelect={setSelectedProduct} 
-                        onAddToCart={handleAddToCart} 
+                      <ProductCard
+                        product={prod}
+                        onAddToCart={addToCart}
                       />
                     </div>
                   ))}
@@ -252,19 +189,12 @@ export default function HomeClient({
       <Footer onGoToSection={handleGoToSection} />
 
       {/* Sliding Bag drawer panel */}
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={closeCart}
         cartItems={cartItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-      />
-
-      {/* Pop-up detail card and Care Tip accordion */}
-      <ProductDetailModal 
-        product={selectedProduct} 
-        onClose={() => setSelectedProduct(null)} 
-        onAddToCart={handleAddToCart} 
+        onUpdateQuantity={updateQuantity}
+        onRemoveItem={removeItem}
       />
 
     </div>

@@ -263,6 +263,80 @@ async function grantPublicRead(collection) {
   console.log(`✓ permissão read Public concedida para ${collection}`);
 }
 
+// ─── 6. Automação de slug em products ──────────────────────────────────────────
+
+const AUTO_SLUG_FLOW_ID = '3eaf8442-6707-43eb-a82b-ba9cfadcd58e';
+const AUTO_SLUG_OPERATION_ID = 'd6ac3b4e-1333-410c-85dc-6eb0aa32e95d';
+
+const SLUGIFY_SCRIPT = `module.exports = async function(data) {
+  const name = data?.payload?.name;
+  if (!name) return data.payload;
+
+  const slug = name
+    .toString()
+    .normalize('NFD')
+    .replace(/[\\u0300-\\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || ('produto-' + Date.now());
+
+  return { ...data.payload, slug };
+};
+`;
+
+async function flowExists(id) {
+  try { await api('GET', `/flows/${id}`); return true; } catch { return false; }
+}
+
+// NOTA (2026-07-08): testado manualmente contra a instância de produção — o
+// flow é criado corretamente e o trigger (hook/filter, scope items.create +
+// items.update, collection products) está configurado como a documentação
+// descreve, mas a mutação do payload pela operação "exec" não estava sendo
+// aplicada mesmo após corrigir accountability ('all' não é um valor válido;
+// usar '$full') e adicionar options.return: '$last' (Response Body).
+// Por isso o flow é criado com status "inactive" — ele NÃO está ativo em
+// produção e o campo slug permanece editável manualmente (não foi marcado
+// readonly). Antes de reativar: abra o flow no editor visual do Directus
+// (Configurações → Flows) e use o botão de teste/log de execução para
+// inspecionar por que a operação não está substituindo o payload — isso não
+// é possível de diagnosticar apenas via API REST.
+async function configureProductSlugAutomation() {
+  if (await flowExists(AUTO_SLUG_FLOW_ID)) {
+    console.log('✓ flow de slug automático já existe (revise manualmente antes de ativar — ver nota acima)');
+    return;
+  }
+
+  await api('POST', '/flows', {
+    id: AUTO_SLUG_FLOW_ID,
+    name: 'Auto-gerar slug de produtos',
+    icon: 'bolt',
+    status: 'inactive',
+    trigger: 'hook',
+    accountability: '$full',
+    options: {
+      type: 'filter',
+      scope: ['items.create', 'items.update'],
+      collections: ['products'],
+      return: '$last',
+    },
+  });
+
+  await api('POST', '/operations', {
+    id: AUTO_SLUG_OPERATION_ID,
+    name: 'Gerar slug a partir do nome',
+    key: 'gerar_slug',
+    type: 'exec',
+    position_x: 19,
+    position_y: 1,
+    options: { code: SLUGIFY_SCRIPT },
+    flow: AUTO_SLUG_FLOW_ID,
+  });
+
+  await api('PATCH', `/flows/${AUTO_SLUG_FLOW_ID}`, { operation: AUTO_SLUG_OPERATION_ID });
+
+  console.log('✓ flow de slug automático criado como INATIVO — revisar no admin do Directus antes de ativar (ver nota acima)');
+}
+
 // ─── main ─────────────────────────────────────────────────────────────────────
 
 console.log(`\nConectando em ${BASE_URL}...\n`);
@@ -277,6 +351,8 @@ try {
   await grantPublicRead('site_settings');
   await grantPublicRead('faqs');
   await grantPublicRead('privacy_policy');
+
+  await configureProductSlugAutomation();
 
   console.log('\n✅ Setup Directus concluído com sucesso!\n');
 } catch (err) {

@@ -7,6 +7,7 @@ import { Product } from '@/types/types';
 function mapItem(p: any): Product {
   return {
     id: p.slug,
+    directusId: p.id,
     name: p.name,
     subtitle: p.subtitle ?? '',
     description: p.description ?? '',
@@ -18,6 +19,7 @@ function mapItem(p: any): Product {
     ),
     category: p.category,
     featured: p.featured ?? false,
+    inStock: p.in_stock ?? true,
     details: {
       weight: p.weight ?? undefined,
       burnTime: p.burn_time ?? undefined,
@@ -34,6 +36,7 @@ export async function getProducts(): Promise<Product[]> {
     const items = await directus.request(
       readItems('products', {
         fields: [
+          'id',
           'slug',
           'name',
           'subtitle',
@@ -41,6 +44,7 @@ export async function getProducts(): Promise<Product[]> {
           'price',
           'category',
           'featured',
+          'in_stock',
           'scents',
           'weight',
           'burn_time',
@@ -49,7 +53,6 @@ export async function getProducts(): Promise<Product[]> {
           'image',
           'gallery.directus_files_id',
         ],
-        filter: { in_stock: { _eq: true } },
       })
     );
 
@@ -70,6 +73,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     const items = await directus.request(
       readItems('products', {
         fields: [
+          'id',
           'slug',
           'name',
           'subtitle',
@@ -77,6 +81,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
           'price',
           'category',
           'featured',
+          'in_stock',
           'scents',
           'weight',
           'burn_time',
