@@ -20,22 +20,22 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return FALLBACK;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await directus.request(readSingleton('site_settings' as any));
+    const data = await directus.request(readSingleton('configuracoes_site' as any));
     if (!data) return FALLBACK;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const s = data as any;
     return {
-      brand_name: s.brand_name ?? FALLBACK.brand_name,
-      tagline: s.tagline ?? FALLBACK.tagline,
-      whatsapp_number: s.whatsapp_number ?? FALLBACK.whatsapp_number,
-      whatsapp_default_message: s.whatsapp_default_message ?? FALLBACK.whatsapp_default_message,
-      instagram_url: s.instagram_url ?? FALLBACK.instagram_url,
-      contact_email: s.contact_email ?? FALLBACK.contact_email,
-      seo_title: s.seo_title ?? FALLBACK.seo_title,
-      seo_description: s.seo_description ?? FALLBACK.seo_description,
-      og_image: fileUrl(s.og_image),
-      footer_note: s.footer_note ?? FALLBACK.footer_note,
+      brand_name: s.nome_marca ?? FALLBACK.brand_name,
+      tagline: s.slogan ?? FALLBACK.tagline,
+      whatsapp_number: s.numero_whatsapp ?? FALLBACK.whatsapp_number,
+      whatsapp_default_message: s.mensagem_padrao_whatsapp ?? FALLBACK.whatsapp_default_message,
+      instagram_url: s.url_instagram ?? FALLBACK.instagram_url,
+      contact_email: s.email ?? FALLBACK.contact_email,
+      seo_title: s.titulo_seo_padrao ?? FALLBACK.seo_title,
+      seo_description: s.descricao_seo_padrao ?? FALLBACK.seo_description,
+      og_image: fileUrl(s.imagem_og),
+      footer_note: s.nota_rodape ?? FALLBACK.footer_note,
     };
   } catch (err) {
     console.warn('Falha ao buscar site_settings do Directus, usando fallback:', err);

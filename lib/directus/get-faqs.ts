@@ -35,15 +35,20 @@ export async function getFaqs(): Promise<Faq[]> {
 
     const items = await directus.request(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      readItems('faqs' as any, { fields: ['id', 'question', 'answer', 'sort'], sort: ['sort'], limit: 4 })
+      readItems('faqs' as any, {
+        fields: ['id', 'pergunta', 'resposta', 'ordem'],
+        filter: { ativo: { _eq: true } },
+        sort: ['ordem'],
+        limit: 4,
+      })
     );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const faqs = (items as any[]).map((f) => ({
       id: f.id,
-      question: f.question,
-      answer: f.answer,
-      sort: f.sort ?? 0,
+      question: f.pergunta,
+      answer: f.resposta,
+      sort: f.ordem ?? 0,
     }));
 
     return faqs.length > 0 ? faqs : FALLBACK;

@@ -7,17 +7,17 @@ export async function getPrivacyPolicy(): Promise<PrivacyPolicy | null> {
     if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return null;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await directus.request(readSingleton('privacy_policy' as any));
+    const data = await directus.request(readSingleton('politica_privacidade' as any));
     if (!data) return null;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const p = data as any;
-    if (!p.title) return null;
+    if (!p.titulo) return null;
 
     return {
-      title: p.title,
-      last_updated: p.last_updated ?? '',
-      body: p.body ?? '',
+      title: p.titulo,
+      last_updated: p.atualizado_em ?? '',
+      body: p.corpo ?? '',
     };
   } catch (err) {
     console.warn('Falha ao buscar privacy_policy do Directus:', err);

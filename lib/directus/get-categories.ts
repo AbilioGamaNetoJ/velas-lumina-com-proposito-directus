@@ -14,15 +14,19 @@ export async function getCategories(): Promise<Category[]> {
 
     const items = await directus.request(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      readItems('categories' as any, { fields: ['id', 'name', 'slug', 'sort'], sort: ['sort'] })
+      readItems('categorias' as any, {
+        fields: ['id', 'nome', 'slug', 'ordem'],
+        filter: { ativo: { _eq: true } },
+        sort: ['ordem'],
+      })
     );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cats = (items as any[]).map((c) => ({
       id: c.id,
-      name: c.name,
+      name: c.nome,
       slug: c.slug,
-      sort: c.sort ?? 0,
+      sort: c.ordem ?? 0,
     }));
 
     return cats.length > 0 ? cats : FALLBACK;

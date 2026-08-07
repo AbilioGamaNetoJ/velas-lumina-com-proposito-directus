@@ -55,3 +55,6 @@ coverage/
 # dotcontext — estado gerado/local (sessions, traces, cache semântico)
 .context/runtime/
 .context/cache/
+
+# Backups locais gerados por scripts/directus-migrate-pt-br.mjs (dumps de dados reais)
+scripts/backups/
