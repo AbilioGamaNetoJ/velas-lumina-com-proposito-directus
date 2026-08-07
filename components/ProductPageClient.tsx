@@ -95,7 +95,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
 
           {/* Image Gallery Column */}
           <div className="flex flex-col gap-6">
-            <div className="relative rounded-3xl overflow-hidden shadow-ambient aspect-[4/3]">
+            <div className="relative rounded-3xl overflow-hidden shadow-ambient aspect-[2/3] md:aspect-[9/14]">
               <ProductGallery images={allImages} productName={product.name} outOfStock={soldOut} />
             </div>
 

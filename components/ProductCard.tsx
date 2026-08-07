@@ -26,7 +26,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] border border-primary/15 hover:shadow-ambient hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full"
     >
       {/* Product Image Stage */}
-      <Link href={`/produtos/${product.id}`} className="relative aspect-square overflow-hidden bg-soft-blush cursor-pointer block">
+      <Link href={`/produtos/${product.id}`} className="relative aspect-[16/23] overflow-hidden bg-soft-blush cursor-pointer block">
         <div className="w-full h-full animate-image-scale-down">
           <img
             src={product.image}
@@ -86,14 +86,9 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         </div>
 
         {/* Subtitle / Essence */}
-        <p className="text-muted-brown/90 text-sm mb-4 flex-grow line-clamp-2 leading-relaxed">
+        <p className="text-muted-brown/90 text-sm mb-6 flex-grow line-clamp-2 leading-relaxed">
           {product.subtitle}
         </p>
-
-        {/* Scent text listing */}
-        <div className="text-muted-brown/70 text-[10px] font-medium tracking-wider uppercase mb-6">
-          {product.scents.slice(0, 2).join(' • ')}
-        </div>
 
         {/* CTA Purchase button */}
         {soldOut ? (

@@ -5,7 +5,8 @@
 
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import FeaturedSection from '@/components/FeaturedSection';
@@ -18,7 +19,7 @@ import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
 import { useCartContext } from '@/components/CartContext';
 import { Product, Category, Faq } from '@/types/types';
-import { Search, AlertCircle, ArrowRight } from 'lucide-react';
+import { Search, AlertCircle, ArrowRight, X } from 'lucide-react';
 
 export default function HomeClient({
   products,
@@ -32,8 +33,20 @@ export default function HomeClient({
   // Filtering & Catalog states
   const [activeCategory, setActiveCategory] = useState<string>('todas');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const { cartItems, addToCart, updateQuantity, removeItem, cartCount, isCartOpen, openCart, closeCart } = useCartContext();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleGoToSection = (id: string) => {
     if (id === 'contato') {
@@ -69,6 +82,14 @@ export default function HomeClient({
     
     return matchesCategory && matchesSearch;
   });
+
+  const searchResults = searchQuery.trim()
+    ? products.filter((p) =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.scents.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
+      ).slice(0, 5)
+    : [];
 
   return (
     <div className="bg-warm-bg min-h-screen flex flex-col font-sans select-none antialiased">
@@ -130,16 +151,74 @@ export default function HomeClient({
                 ))}
               </div>
 
-              {/* Instant Search textbox */}
-              <div className="relative w-full md:w-80 group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-brown/50 group-focus-within:text-primary transition-colors duration-300" />
+              {/* Instant Search textbox with dynamic dropdown */}
+              <div ref={searchRef} className="relative w-full md:w-80 group z-30">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-brown/50 group-focus-within:text-primary transition-colors duration-300 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsSearchFocused(true);
+                  }}
                   placeholder="Buscar essências..."
-                  className="w-full pl-11 pr-4 py-2.5 bg-white text-dark-brown text-sm rounded-full border border-high-blush/30 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 placeholder:text-muted-brown/50"
+                  className="w-full pl-11 pr-10 py-2.5 bg-white text-dark-brown text-sm rounded-full border border-high-blush/30 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 placeholder:text-muted-brown/50"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setIsSearchFocused(false);
+                    }}
+                    aria-label="Limpar pesquisa"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-muted-brown/50 hover:text-primary rounded-full transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+
+                {/* Dynamic live search dropdown */}
+                {isSearchFocused && searchQuery.trim() !== '' && (
+                  <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-2xl border border-high-blush/40 shadow-xl overflow-hidden py-2 z-50">
+                    {searchResults.length > 0 ? (
+                      <div>
+                        <div className="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-brown/70 border-b border-high-blush/20">
+                          Sugestões ({searchResults.length})
+                        </div>
+                        {searchResults.map((product) => (
+                          <Link
+                            key={product.id}
+                            href={`/produtos/${product.id}`}
+                            onClick={() => setIsSearchFocused(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 hover:bg-soft-blush/60 transition-colors group/item"
+                          >
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-10 h-10 object-cover rounded-lg shrink-0 border border-high-blush/30"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-bold text-dark-brown group-hover/item:text-primary transition-colors truncate">
+                                {product.name}
+                              </p>
+                              <p className="text-xs text-muted-brown truncate">
+                                {product.subtitle || product.category}
+                              </p>
+                            </div>
+                            <span className="text-xs font-bold text-primary shrink-0">
+                              R$ {product.price.toFixed(2)}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="px-4 py-4 text-center">
+                        <p className="text-xs text-muted-brown">Nenhum resultado para "{searchQuery}"</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
             </div>

@@ -52,3 +52,15 @@ body {
 .animate-image-scale-down {
   animation: imageScaleDown 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
