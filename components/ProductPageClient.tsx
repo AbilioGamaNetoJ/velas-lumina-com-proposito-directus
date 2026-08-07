@@ -5,10 +5,11 @@
 
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, ArrowLeft, Flame, Clock, Scale, ShoppingCart, Bell, PackageX, Sparkles } from 'lucide-react';
-import { Product } from '@/types/types';
+import { ChevronRight, ChevronDown, ArrowLeft, Flame, ShoppingCart, Bell, PackageX } from 'lucide-react';
+import { Product, QuantityOption } from '@/types/types';
 import { useCartContext } from '@/components/CartContext';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
@@ -32,6 +33,23 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
   const soldOut = product.inStock === false;
   const allImages = [product.image, ...(product.gallery || [])];
   const notifyMeUrl = buildWhatsAppURL({ productName: product.name, notifyMe: true, number: settings.whatsapp_number });
+
+  const showQuantitySelector = !product.unitProduct && (product.quantityOptions?.length ?? 0) > 0;
+  const [selectedQuantity, setSelectedQuantity] = useState<QuantityOption | undefined>(
+    showQuantitySelector ? product.quantityOptions?.[0] : undefined
+  );
+  const displayPrice = selectedQuantity?.price ?? product.price;
+
+  const specs: { label: string; value: string }[] = [
+    product.details?.dimensions ? { label: 'Dimensões:', value: product.details.dimensions } : null,
+    product.details?.weight ? { label: 'Peso:', value: product.details.weight } : null,
+    product.scents.length > 0 ? { label: 'Composição Aromática:', value: product.scents.join(', ') } : null,
+    product.productDescription ? { label: 'Descrição do Produto:', value: product.productDescription } : null,
+  ].filter((s): s is { label: string; value: string } => s !== null);
+
+  const whatsappMessage = selectedQuantity
+    ? `Olá! Tenho interesse no produto: *${product.name}* (${selectedQuantity.quantity} unidades - R$ ${selectedQuantity.price.toFixed(2)}). Poderia me dar mais informações?`
+    : undefined;
 
   const handleGoToSection = (id: string) => {
     router.push(`/#${id}`);
@@ -76,8 +94,21 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
           {/* Image Gallery Column */}
-          <div className="relative rounded-3xl overflow-hidden shadow-ambient">
-            <ProductGallery images={allImages} productName={product.name} outOfStock={soldOut} />
+          <div className="flex flex-col gap-6">
+            <div className="relative rounded-3xl overflow-hidden shadow-ambient aspect-[4/3]">
+              <ProductGallery images={allImages} productName={product.name} outOfStock={soldOut} />
+            </div>
+
+            {specs.length > 0 && (
+              <div className="bg-white rounded-2xl border border-high-blush/30 p-6">
+                {specs.map((spec, i) => (
+                  <div key={spec.label} className={i > 0 ? 'mt-5' : ''}>
+                    <p className="text-xs uppercase tracking-wider font-bold text-dark-brown">{spec.label}</p>
+                    <p className="text-sm text-muted-brown mt-1 leading-relaxed whitespace-pre-line">{spec.value}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Product Details Column */}
@@ -105,65 +136,41 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
               {product.name}
             </h1>
             <p className="text-xl text-primary font-bold mb-6">
-              R$ {product.price.toFixed(2)}
+              R$ {displayPrice.toFixed(2)}
             </p>
 
-            <div className="prose prose-sm text-muted-brown mb-8 leading-relaxed">
+            <div className="prose prose-sm text-muted-brown mb-6 leading-relaxed">
               <p>{product.description}</p>
             </div>
 
-            <div className="mb-8">
-              <h3 className="text-xs uppercase tracking-wider font-bold text-dark-brown mb-3">Composição Aromática</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.scents.map((scent, i) => (
-                  <span key={i} className="bg-soft-blush border border-primary/15 text-muted-brown text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3 text-accent-gold shrink-0" />
-                    {scent}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {product.details && (product.details.weight || product.details.burnTime || product.details.essenceStrength) && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-left bg-soft-blush/60 p-5 rounded-2xl border border-high-blush/30 mb-8">
-                {product.details.weight && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-full text-primary shadow-xs">
-                      <Scale className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-[9px] uppercase text-muted-brown tracking-wider">Peso</p>
-                      <p className="text-xs font-bold text-dark-brown">{product.details.weight}</p>
-                    </div>
-                  </div>
-                )}
-                {product.details.burnTime && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-full text-primary shadow-xs">
-                      <Clock className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-[9px] uppercase text-muted-brown tracking-wider">Queima</p>
-                      <p className="text-xs font-bold text-dark-brown">{product.details.burnTime}</p>
-                    </div>
-                  </div>
-                )}
-                {product.details.essenceStrength && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-full text-primary shadow-xs">
-                      <Flame className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-[9px] uppercase text-muted-brown tracking-wider">Intensidade</p>
-                      <p className="text-xs font-bold text-dark-brown">{product.details.essenceStrength}</p>
-                    </div>
-                  </div>
-                )}
+            {showQuantitySelector && (
+              <div className="mb-6">
+                <label htmlFor="quantity-select" className="text-xs uppercase tracking-wider font-bold text-dark-brown mb-3 block">
+                  Quantidade
+                </label>
+                <div className="relative w-full sm:w-64">
+                  <select
+                    id="quantity-select"
+                    value={selectedQuantity?.quantity}
+                    onChange={(e) => {
+                      const opt = product.quantityOptions?.find((q) => q.quantity === e.target.value);
+                      setSelectedQuantity(opt);
+                    }}
+                    className="w-full appearance-none bg-soft-blush border border-primary/15 text-dark-brown text-sm font-semibold rounded-xl px-4 py-3.5 pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  >
+                    {product.quantityOptions?.map((opt) => (
+                      <option key={opt.quantity} value={opt.quantity}>
+                        {opt.quantity} unidades — R$ {opt.price.toFixed(2)}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
+                </div>
               </div>
             )}
 
-            {/* CTA buttons */}
-            <div className="mt-auto">
+            {/* CTA buttons placed immediately below Quantity (or Description if unit product) */}
+            <div className="mb-6">
               <div className="flex flex-col sm:flex-row gap-4">
                 {soldOut ? (
                   <a
@@ -177,7 +184,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                   </a>
                 ) : (
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={() => addToCart(product, selectedQuantity)}
                     className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                   >
                     <ShoppingCart className="w-4 h-4 shrink-0" />
@@ -185,7 +192,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                   </button>
                 )}
 
-                <WhatsAppCTA productName={product.name} price={product.price} className="flex-1">
+                <WhatsAppCTA productName={product.name} price={displayPrice} customMessage={whatsappMessage} className="flex-1">
                   Orçar no WhatsApp
                 </WhatsAppCTA>
               </div>

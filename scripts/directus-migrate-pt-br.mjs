@@ -190,7 +190,7 @@ async function createProdutosImagensJunction() {
     field: 'imagens',
     type: 'alias',
     meta: {
-      interface: 'file',
+      interface: 'files',
       special: ['files'],
       display: 'files',
       width: 'full',

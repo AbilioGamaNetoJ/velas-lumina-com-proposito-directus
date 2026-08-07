@@ -31,6 +31,7 @@ export interface CartOrderItem {
   category: string;
   quantity: number;
   price: number;
+  quantityLabel?: string;
 }
 
 export function buildCartOrderMessage(brandName: string, items: CartOrderItem[]): string {
@@ -42,6 +43,9 @@ export function buildCartOrderMessage(brandName: string, items: CartOrderItem[])
   items.forEach((item, index) => {
     message += `*${index + 1}. ${item.name}*\n`;
     message += `   - Categoria: ${item.category}\n`;
+    if (item.quantityLabel) {
+      message += `   - Opção: ${item.quantityLabel}\n`;
+    }
     message += `   - Qtd: ${item.quantity}x de R$ ${item.price.toFixed(2)}\n\n`;
   });
 

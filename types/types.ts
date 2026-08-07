@@ -3,12 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export interface QuantityOption {
+  quantity: string;
+  price: number;
+}
+
 export interface Product {
   id: string;
   directusId?: string | number;
   name: string;
   subtitle: string;
   description: string;
+  productDescription?: string;
   scents: string[];
   price: number;
   image: string;
@@ -16,10 +22,10 @@ export interface Product {
   category: string;
   details?: {
     weight?: string;
-    burnTime?: string;
     dimensions?: string;
-    essenceStrength?: 'Suave' | 'Média' | 'Intensa';
   };
+  quantityOptions?: QuantityOption[];
+  unitProduct?: boolean;
   featured?: boolean;
   inStock?: boolean;
 }
@@ -62,5 +68,6 @@ export interface CartItem {
   product: Product;
   quantity: number;
   priceAtAddition: number;
+  selectedQuantity?: QuantityOption;
   unavailable?: boolean;
 }

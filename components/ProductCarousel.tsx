@@ -11,7 +11,7 @@ interface ProductCarouselProps {
 
 export default function ProductCarousel({ children }: ProductCarouselProps) {
   const [isClient, setIsClient] = useState(false);
-  const plugins = React.useMemo(() => [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })], []);
+  const plugins = React.useMemo(() => [Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })], []);
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     align: 'start', 
     loop: true,
@@ -44,9 +44,30 @@ export default function ProductCarousel({ children }: ProductCarouselProps) {
     };
   }, []);
 
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
+  // Clicking the arrow/dot buttons calls the Embla API directly rather than
+  // dragging the track, so the Autoplay plugin's own interaction listener
+  // (bound to pointerdown on the viewport) never fires — autoplay keeps
+  // ticking in the background and races with these clicks unless stopped here.
+  const stopAutoplay = useCallback(() => {
+    const autoplay = emblaApi?.plugins()?.autoplay as { stop?: () => void } | undefined;
+    autoplay?.stop?.();
+  }, [emblaApi]);
+
+  const scrollPrev = useCallback(() => {
+    if (!emblaApi) return;
+    stopAutoplay();
+    emblaApi.scrollPrev();
+  }, [emblaApi, stopAutoplay]);
+  const scrollNext = useCallback(() => {
+    if (!emblaApi) return;
+    stopAutoplay();
+    emblaApi.scrollNext();
+  }, [emblaApi, stopAutoplay]);
+  const scrollTo = useCallback((index: number) => {
+    if (!emblaApi) return;
+    stopAutoplay();
+    emblaApi.scrollTo(index);
+  }, [emblaApi, stopAutoplay]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -55,33 +76,37 @@ export default function ProductCarousel({ children }: ProductCarouselProps) {
     setNextBtnEnabled(emblaApi.canScrollNext());
   }, [emblaApi]);
 
+  const onReInit = useCallback(() => {
+    if (!emblaApi) return;
+    setScrollSnaps(emblaApi.scrollSnapList());
+    onSelect();
+  }, [emblaApi, onSelect]);
+
   useEffect(() => {
     setIsClient(true);
 
     if (!emblaApi) return;
-    onSelect();
-    setScrollSnaps(emblaApi.scrollSnapList());
+    onReInit();
     emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    emblaApi.on('reInit', onReInit);
 
-  }, [emblaApi, onSelect]);
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onReInit);
+    };
+  }, [emblaApi, onSelect, onReInit]);
 
   return (
     <div className="relative" ref={containerRef}>
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex touch-pan-y -ml-4 sm:-ml-6 lg:-ml-8">
-          {/* Duplicate children to ensure infinite loop works without rewinding */}
           {(() => {
             const childArray = React.Children.toArray(children);
             const count = childArray.length;
             if (count === 0) return null;
-            
-            const items = count < 6 
-              ? [...childArray, ...childArray, ...childArray].slice(0, Math.max(6, count * 2))
-              : childArray;
-              
-            return items.map((child, index) => (
-              <div 
+
+            return childArray.map((child, index) => (
+              <div
                 key={`carousel-item-${index}`}
                 className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] xl:flex-[0_0_25%] pl-4 sm:pl-6 lg:pl-8 min-w-0"
               >

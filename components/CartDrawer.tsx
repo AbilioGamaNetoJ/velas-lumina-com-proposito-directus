@@ -40,6 +40,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
         category: item.product.category,
         quantity: item.quantity,
         price: item.priceAtAddition,
+        quantityLabel: item.selectedQuantity ? `${item.selectedQuantity.quantity} unidades` : undefined,
       }))
     );
 
@@ -141,6 +142,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                             ) : (
                               <p className="text-[10px] uppercase tracking-wider font-bold text-primary mt-0.5">
                                 {item.product.category}
+                                {item.selectedQuantity && ` • ${item.selectedQuantity.quantity} unidades`}
                               </p>
                             )}
                           </div>

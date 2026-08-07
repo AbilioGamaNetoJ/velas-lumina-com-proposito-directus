@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { CartItem, Product } from '@/types/types';
+import { CartItem, Product, QuantityOption } from '@/types/types';
 
 const STORAGE_KEY = 'lumina-velas-cart';
 
@@ -34,7 +34,10 @@ export function useCart(products: Product[]) {
         const reconciled = parsed.map((item) => {
           const fresh = findLiveProduct(liveProducts, item);
           if (!fresh) return { ...item, unavailable: true };
-          return { ...item, product: fresh, priceAtAddition: fresh.price, unavailable: false };
+          const freshPrice = item.selectedQuantity
+            ? fresh.quantityOptions?.find((q) => q.quantity === item.selectedQuantity?.quantity)?.price ?? item.selectedQuantity.price
+            : fresh.price;
+          return { ...item, product: fresh, priceAtAddition: freshPrice, unavailable: false };
         });
         setCartItems(reconciled);
       }
@@ -58,21 +61,24 @@ export function useCart(products: Product[]) {
     }
   }, [cartItems]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, selectedQuantity?: QuantityOption) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.product?.id === product.id);
+      const existing = prev.find(
+        (item) => item.product?.id === product.id && item.selectedQuantity?.quantity === selectedQuantity?.quantity
+      );
       if (existing) {
         return prev.map((item) =>
-          item.product?.id === product.id
+          item === existing
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
       return [...prev, {
-        id: `standard-${product.id}-${Date.now()}`,
+        id: `standard-${product.id}-${selectedQuantity?.quantity ?? 'base'}-${Date.now()}`,
         product,
         quantity: 1,
-        priceAtAddition: product.price
+        priceAtAddition: selectedQuantity?.price ?? product.price,
+        selectedQuantity,
       }];
     });
     setIsCartOpen(true);

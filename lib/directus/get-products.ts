@@ -11,6 +11,7 @@ function mapItem(p: any): Product {
     name: p.nome,
     subtitle: p.descricao ?? '',
     description: p.descricao_detalhada ?? '',
+    productDescription: p.descricao_produto ?? undefined,
     scents: p.aromas ?? [],
     price: p.preco,
     image: fileUrl(p.imagem),
@@ -22,10 +23,14 @@ function mapItem(p: any): Product {
     inStock: !(p.sem_estoque ?? false),
     details: {
       weight: p.peso ?? undefined,
-      burnTime: p.tempo_queima ?? undefined,
       dimensions: p.dimensoes ?? undefined,
-      essenceStrength: p.intensidade_aroma ?? undefined,
     },
+    quantityOptions: (p.quantidades ?? []).map((q: { quantidade: string; preco: number | null }) => {
+      const quantity = String(q.quantidade);
+      const price = q.preco != null && q.preco > 0 ? Number(q.preco) : Number(q.quantidade) * p.preco;
+      return { quantity, price };
+    }),
+    unitProduct: p.produto_unitario ?? false,
   };
 }
 
@@ -35,6 +40,7 @@ const PRODUCT_FIELDS = [
   'nome',
   'descricao',
   'descricao_detalhada',
+  'descricao_produto',
   'preco',
   'categoria.slug',
   'destaque',
@@ -42,11 +48,11 @@ const PRODUCT_FIELDS = [
   'sem_estoque',
   'aromas',
   'peso',
-  'tempo_queima',
   'dimensoes',
-  'intensidade_aroma',
   'imagem',
   'imagens.directus_files_id',
+  'produto_unitario',
+  'quantidades',
 ] as const;
 
 export async function getProducts(): Promise<Product[]> {

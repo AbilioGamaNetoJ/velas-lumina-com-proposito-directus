@@ -17,9 +17,7 @@ export const PRODUCTS: Product[] = [
     category: 'velas',
     details: {
       weight: '120g',
-      burnTime: '24 horas',
-      dimensions: '8cm x 8cm x 4cm',
-      essenceStrength: 'Média'
+      dimensions: '8cm x 8cm x 4cm'
     },
     featured: true
   },
@@ -33,8 +31,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBF04SeMUoKVCJeIHLxZcjRN3rmf-IRJThYS5zEWLqV7-m77es265zkzCoq3H_P30BSaGj12wjKYVwbyMFXNcuJBV4lVw9tyFqnr03zsnEIf3CdqAAyhD5ZPp9gVCrYbS1O3yu5Gd15sDtyH7Cy-bVQMcSi8bt_LuCgwWePrNflLJUZTBhNtf4csdrWMigm30fX49Czeud-FkvtuI0VtUWrKlMMzK7XpFsHOKm1U6GO10XP9DiwYn4zkXyEvYQ_NEBNzu0MJOM-qsE',
     category: 'arranjos',
     details: {
-      dimensions: '22cm x 22cm x 15cm',
-      essenceStrength: 'Intensa'
+      dimensions: '22cm x 22cm x 15cm'
     },
     featured: true
   },
@@ -49,9 +46,7 @@ export const PRODUCTS: Product[] = [
     category: 'velas',
     details: {
       weight: '120g',
-      burnTime: '24 horas',
-      dimensions: '8cm x 8cm x 4cm',
-      essenceStrength: 'Suave'
+      dimensions: '8cm x 8cm x 4cm'
     }
   },
   {
@@ -74,9 +69,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmKXQD-AicITpI_UrYQZL4AsHPR90d1XvTSnvCU3h6Tiibbul20i0SGgvOJntjdCiy_8kh-i-4g-P4VBkqMouvXyjl8zg-ZtsMvmzFWQHypUGF1z3sUsdEvHq6gbZFwTTtUmPmIjZxS3R75cXUruwbR8l9IlQIw4vIGnfCKZ5PHYR5Mbh3jbBgj2CIyRg8-q_6rzKPFjMxOQR8eCCcO6vSraQbJ2v-0jl592y_12lXktrK1w8OUsNIkF3JW1s_WU_vxQbqCRKuA84',
     category: 'velas',
     details: {
-      weight: '120g',
-      burnTime: '24 horas',
-      essenceStrength: 'Intensa'
+      weight: '120g'
     },
     featured: true
   },
@@ -100,9 +93,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmKXQD-AicITpI_UrYQZL4AsHPR90d1XvTSnvCU3h6Tiibbul20i0SGgvOJntjdCiy_8kh-i-4g-P4VBkqMouvXyjl8zg-ZtsMvmzFWQHypUGF1z3sUsdEvHq6gbZFwTTtUmPmIjZxS3R75cXUruwbR8l9IlQIw4vIGnfCKZ5PHYR5Mbh3jbBgj2CIyRg8-q_6rzKPFjMxOQR8eCCcO6vSraQbJ2v-0jl592y_12lXktrK1w8OUsNIkF3JW1s_WU_vxQbqCRKuA84',
     category: 'velas',
     details: {
-      weight: '120g',
-      burnTime: '24 horas',
-      essenceStrength: 'Média'
+      weight: '120g'
     }
   },
   {
@@ -115,8 +106,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBF04SeMUoKVCJeIHLxZcjRN3rmf-IRJThYS5zEWLqV7-m77es265zkzCoq3H_P30BSaGj12wjKYVwbyMFXNcuJBV4lVw9tyFqnr03zsnEIf3CdqAAyhD5ZPp9gVCrYbS1O3yu5Gd15sDtyH7Cy-bVQMcSi8bt_LuCgwWePrNflLJUZTBhNtf4csdrWMigm30fX49Czeud-FkvtuI0VtUWrKlMMzK7XpFsHOKm1U6GO10XP9DiwYn4zkXyEvYQ_NEBNzu0MJOM-qsE',
     category: 'arranjos',
     details: {
-      dimensions: '30cm x 30cm x 18cm',
-      essenceStrength: 'Intensa'
+      dimensions: '30cm x 30cm x 18cm'
     }
   },
   {
@@ -129,9 +119,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmKXQD-AicITpI_UrYQZL4AsHPR90d1XvTSnvCU3h6Tiibbul20i0SGgvOJntjdCiy_8kh-i-4g-P4VBkqMouvXyjl8zg-ZtsMvmzFWQHypUGF1z3sUsdEvHq6gbZFwTTtUmPmIjZxS3R75cXUruwbR8l9IlQIw4vIGnfCKZ5PHYR5Mbh3jbBgj2CIyRg8-q_6rzKPFjMxOQR8eCCcO6vSraQbJ2v-0jl592y_12lXktrK1w8OUsNIkF3JW1s_WU_vxQbqCRKuA84',
     category: 'velas',
     details: {
-      weight: '120g',
-      burnTime: '24 horas',
-      essenceStrength: 'Intensa'
+      weight: '120g'
     }
   },
   {
