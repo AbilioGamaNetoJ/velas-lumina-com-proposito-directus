@@ -95,7 +95,8 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
 
           {/* Image Gallery Column */}
           <div className="flex flex-col gap-6">
-            <div className="relative rounded-3xl overflow-hidden shadow-ambient aspect-[2/3] md:aspect-[9/14]">
+            {/* Mesma proporção de capa do ProductCard.tsx (1064x1600, ~2:3) */}
+            <div className="relative rounded-3xl overflow-hidden shadow-ambient aspect-[2/3]">
               <ProductGallery images={allImages} productName={product.name} outOfStock={soldOut} />
             </div>
 

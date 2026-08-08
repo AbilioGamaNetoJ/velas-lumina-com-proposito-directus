@@ -26,7 +26,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] border border-primary/15 hover:shadow-ambient hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full"
     >
       {/* Product Image Stage */}
-      <Link href={`/produtos/${product.id}`} className="relative aspect-[16/23] overflow-hidden bg-soft-blush cursor-pointer block">
+      {/* Capas são fixas em 1064x1600 (~2:3) — manter aspect-[2/3] ou object-cover corta a moldura/texto do pôster */}
+      <Link href={`/produtos/${product.id}`} className="relative aspect-[2/3] overflow-hidden bg-soft-blush cursor-pointer block">
         <div className="w-full h-full animate-image-scale-down">
           <img
             src={product.image}
