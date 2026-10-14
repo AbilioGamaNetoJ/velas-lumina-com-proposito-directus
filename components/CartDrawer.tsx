@@ -91,11 +91,11 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                     </div>
                     <div>
                       <p className="font-editorial text-lg font-bold text-dark-brown">Sua cesta está vazia</p>
-                      <p className="text-muted-brown text-xs max-w-xs mx-auto mt-1">Navegue pelas nossas essências e adicione as suas criações favoritas para presentear com amor.</p>
+                      <p className="text-muted-brown text-sm max-w-xs mx-auto mt-1">Navegue pelas nossas essências e adicione as suas criações favoritas para presentear com amor.</p>
                     </div>
                     <button
                       onClick={onClose}
-                      className="text-xs font-semibold uppercase tracking-wider bg-primary text-white border border-transparent px-6 py-3 rounded-xl transition-all shadow-sm cursor-pointer"
+                      className="text-sm font-semibold uppercase tracking-wider bg-primary text-white border border-transparent px-6 py-3 rounded-xl transition-all shadow-sm cursor-pointer"
                     >
                       Continuar Navegando
                     </button>
@@ -134,15 +134,15 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                             </div>
 
                             {item.unavailable ? (
-                              <p className="text-[10px] uppercase tracking-wider font-bold text-red-600 mt-0.5">
+                              <p className="text-xs uppercase tracking-wider font-bold text-red-600 mt-0.5">
                                 Não está mais disponível — remova para continuar
                               </p>
                             ) : soldOut ? (
-                              <p className="text-[10px] uppercase tracking-wider font-bold text-red-600 mt-0.5">
+                              <p className="text-xs uppercase tracking-wider font-bold text-red-600 mt-0.5">
                                 Esgotado — remova para continuar
                               </p>
                             ) : (
-                              <p className="text-[10px] uppercase tracking-wider font-bold text-primary mt-0.5">
+                              <p className="text-xs uppercase tracking-wider font-bold text-primary mt-0.5">
                                 {item.product.category}
                                 {item.selectedQuantity && ` • ${formatUnits(item.selectedQuantity.quantity)}`}
                               </p>
@@ -159,7 +159,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
-                              <span className="text-xs font-semibold text-dark-brown w-6 text-center">
+                              <span className="text-sm font-semibold text-dark-brown w-6 text-center">
                                 {item.quantity}
                               </span>
                               <button
@@ -172,7 +172,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                             </div>
 
                             <span className="font-semibold text-primary text-sm text-right">
-                              <FromPriceLabel className="block text-[10px]" />
+                              <FromPriceLabel className="block text-xs" />
                               R$ {(item.priceAtAddition * item.quantity).toFixed(2)}
                             </span>
                           </div>
@@ -192,10 +192,10 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                   <div className="flex justify-between items-center text-left">
                     <div>
                       <p className="font-editorial text-lg font-bold text-dark-brown">Valor Total Estimado</p>
-                      <p className="text-xs text-muted-brown">Entrega combinada via WhatsApp</p>
+                      <p className="text-sm text-muted-brown">Entrega combinada via WhatsApp</p>
                     </div>
                     <p className="font-sans text-2xl font-bold tracking-tight text-primary text-right">
-                      <FromPriceLabel className="block text-xs tracking-normal" />
+                      <FromPriceLabel className="block text-sm tracking-normal" />
                       R$ {subtotal.toFixed(2)}
                     </p>
                   </div>
@@ -210,11 +210,11 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                     Enviar Pedido via WhatsApp
                   </button>
 
-                  <p className="text-xs text-center text-dark-brown font-semibold leading-normal">
+                  <p className="text-sm text-center text-dark-brown font-semibold leading-normal">
                     Os valores são &quot;a partir de&quot; e podem não ser o valor final. O valor definitivo é confirmado no atendimento pelo WhatsApp.
                   </p>
 
-                  <p className="text-[10px] text-center text-muted-brown leading-normal">
+                  <p className="text-xs text-center text-muted-brown leading-normal">
                     Não há pagamento online nessa versão do site. Ao clicar no botão, uma mensagem organizada com a descrição das suas velas será aberta no WhatsApp para concluir seu pedido.
                   </p>
                 </div>

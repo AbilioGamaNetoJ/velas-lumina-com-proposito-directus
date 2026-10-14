@@ -37,7 +37,7 @@ export default function FeaturedSection({ featuredProducts }: Props) {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="flex items-center justify-center gap-2 mb-3">
             <Flame className="w-4 h-4 text-primary" />
-            <span className="text-[10px] uppercase font-bold tracking-widest text-primary">
+            <span className="text-xs uppercase font-bold tracking-widest text-primary">
               Seleção Especial
             </span>
             <Flame className="w-4 h-4 text-primary" />
@@ -45,7 +45,7 @@ export default function FeaturedSection({ featuredProducts }: Props) {
           <h2 className="font-editorial text-4xl sm:text-5xl font-bold text-dark-brown">
             Destaques do mês de {currentMonth}
           </h2>
-          <p className="text-muted-brown text-sm sm:text-base mt-4 max-w-xl mx-auto">
+          <p className="text-muted-brown text-base mt-4 max-w-xl mx-auto">
             Uma curadoria exclusiva de velas e arranjos em evidência neste mês. 
             Disponibilidade limitada.
           </p>

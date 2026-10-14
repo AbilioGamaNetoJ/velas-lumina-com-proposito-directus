@@ -55,7 +55,7 @@ export default function HowItWorks() {
           <h2 className="font-editorial text-3xl sm:text-4xl font-bold text-dark-brown">
             Como realizar seu pedido
           </h2>
-          <p className="text-muted-brown text-sm sm:text-base mt-3">
+          <p className="text-muted-brown text-base mt-3">
             Simples, rápido e com atendimento personalizado pelo WhatsApp — do catálogo à sua porta.
           </p>
         </ScrollReveal>
@@ -89,7 +89,7 @@ export default function HowItWorks() {
                       className={
                         step.highlight
                           ? 'absolute -top-2 -right-2 w-7 h-7 bg-dark-brown text-white text-xs font-bold rounded-full flex items-center justify-center'
-                          : 'absolute -top-2 -right-2 w-6 h-6 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center'
+                          : 'absolute -top-2 -right-2 w-6 h-6 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center'
                       }
                     >
                       {step.number}
@@ -98,7 +98,7 @@ export default function HowItWorks() {
                 </div>
                 <div>
                   <h3 className="font-editorial text-base font-bold text-dark-brown mb-1 lg:mb-2">{step.title}</h3>
-                  <p className="text-muted-brown text-xs leading-relaxed lg:max-w-[200px]">{step.description}</p>
+                  <p className="text-muted-brown text-sm leading-relaxed lg:max-w-[220px]">{step.description}</p>
                 </div>
               </ScrollReveal>
             );
@@ -116,7 +116,7 @@ export default function HowItWorks() {
             <WhatsAppIcon className="w-4 h-4" />
             Iniciar meu pedido agora
           </a>
-          <p className="text-xs text-muted-brown">
+          <p className="text-sm text-muted-brown">
             Tempo médio de resposta: menos de 1h &nbsp;·&nbsp; Pagamento combinado &nbsp;·&nbsp; Entrega nacional
           </p>
         </ScrollReveal>

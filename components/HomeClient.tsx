@@ -117,13 +117,13 @@ export default function HomeClient({
             
             {/* Header intro */}
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full inline-block mb-3">
+              <span className="text-xs uppercase font-bold tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full inline-block mb-3">
                 Coleção Florescer
               </span>
               <h2 className="font-editorial text-3xl sm:text-4xl font-bold text-dark-brown">
                 Nossas Essências Autorais
               </h2>
-              <p className="text-muted-brown text-sm sm:text-base mt-2">
+              <p className="text-muted-brown text-base mt-2">
                 Descubra misturas harmoniosas esculpidas em flores finas, preparadas com cerâmica de colina e ceras puramente botânicas.
               </p>
             </div>
@@ -137,7 +137,7 @@ export default function HomeClient({
                   <button
                     key={cat.slug}
                     onClick={() => setActiveCategory(cat.slug)}
-                    className={`flex-1 md:flex-none px-5 py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full transition-all duration-300 cursor-pointer ${
+                    className={`flex-1 md:flex-none px-3 sm:px-5 py-2.5 text-xs font-bold tracking-wider sm:tracking-widest uppercase rounded-full transition-all duration-300 cursor-pointer ${
                       activeCategory === cat.slug
                         ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
                         : 'bg-transparent text-muted-brown hover:text-primary'
@@ -160,7 +160,7 @@ export default function HomeClient({
                     setIsSearchFocused(true);
                   }}
                   placeholder="Buscar essências..."
-                  className="w-full pl-11 pr-10 py-2.5 bg-white text-dark-brown text-sm rounded-full border border-high-blush/30 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 placeholder:text-muted-brown/50"
+                  className="w-full pl-11 pr-10 py-2.5 bg-white text-dark-brown text-sm rounded-full border border-high-blush/30 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 placeholder:text-muted-brown/80"
                 />
                 {searchQuery && (
                   <button
@@ -169,7 +169,7 @@ export default function HomeClient({
                       setIsSearchFocused(false);
                     }}
                     aria-label="Limpar pesquisa"
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-muted-brown/50 hover:text-primary rounded-full transition-colors cursor-pointer"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-muted-brown hover:text-primary rounded-full transition-colors cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -180,7 +180,7 @@ export default function HomeClient({
                   <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-2xl border border-high-blush/40 shadow-xl overflow-hidden py-2 z-50">
                     {searchResults.length > 0 ? (
                       <div>
-                        <div className="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-brown/70 border-b border-high-blush/20">
+                        <div className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-muted-brown border-b border-high-blush/20">
                           Sugestões ({searchResults.length})
                         </div>
                         {searchResults.map((product) => (
@@ -203,8 +203,8 @@ export default function HomeClient({
                                 {product.subtitle || product.category}
                               </p>
                             </div>
-                            <span className="text-xs font-bold text-primary shrink-0 text-right">
-                              <FromPriceLabel className="block text-[10px]" />
+                            <span className="text-sm font-bold text-primary shrink-0 text-right">
+                              <FromPriceLabel className="block text-xs" />
                               R$ {getStartingPrice(product).toFixed(2)}
                             </span>
                           </Link>
@@ -212,7 +212,7 @@ export default function HomeClient({
                       </div>
                     ) : (
                       <div className="px-4 py-4 text-center">
-                        <p className="text-xs text-muted-brown">Nenhum resultado para "{searchQuery}"</p>
+                        <p className="text-sm text-muted-brown">Nenhum resultado para "{searchQuery}"</p>
                       </div>
                     )}
                   </div>
@@ -227,14 +227,14 @@ export default function HomeClient({
                 <AlertCircle className="w-12 h-12 text-primary opacity-55 stroke-1" />
                 <div>
                   <p className="font-editorial text-lg font-bold text-dark-brown">Nenhum resultado encontrado</p>
-                  <p className="text-muted-brown text-xs mt-1">Nenhum aroma ou combinação confere com sua busca "{searchQuery}". Tente usar termos como "Lavanda", "Mel" ou "Margarida".</p>
+                  <p className="text-muted-brown text-sm mt-1">Nenhum aroma ou combinação confere com sua busca "{searchQuery}". Tente usar termos como "Lavanda", "Mel" ou "Margarida".</p>
                 </div>
                 <button
                   onClick={() => {
                     setSearchQuery('');
                     setActiveCategory('todas');
                   }}
-                  className="text-xs uppercase font-bold tracking-wider bg-soft-blush text-primary hover:bg-primary hover:text-white px-5 py-2.5 rounded-xl transition-colors cursor-pointer"
+                  className="text-sm uppercase font-bold tracking-wider bg-soft-blush text-primary hover:bg-primary hover:text-white px-5 py-2.5 rounded-xl transition-colors cursor-pointer"
                 >
                   Limpar Filtros
                 </button>

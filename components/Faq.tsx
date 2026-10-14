@@ -22,13 +22,13 @@ export default function FaqSection({ faqs }: { faqs: Faq[] }) {
 
         {/* Header */}
         <div className="text-center mb-14">
-          <span className="inline-block text-[10px] uppercase font-bold tracking-widest text-primary bg-primary/10 px-3.5 py-1 rounded-full mb-4">
+          <span className="inline-block text-xs uppercase font-bold tracking-widest text-primary bg-primary/10 px-3.5 py-1 rounded-full mb-4">
             Dúvidas Frequentes
           </span>
           <h2 className="font-editorial text-3xl sm:text-4xl text-dark-brown leading-tight">
             Perguntas Frequentes
           </h2>
-          <p className="text-muted-brown text-sm mt-3 max-w-md mx-auto">
+          <p className="text-muted-brown text-base mt-3 max-w-md mx-auto">
             Não encontrou o que procurava? Fale conosco pelo WhatsApp.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function FaqSection({ faqs }: { faqs: Faq[] }) {
                   className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 cursor-pointer"
                 >
                   <span
-                    className={`font-sans text-sm sm:text-[15px] font-semibold leading-snug transition-colors duration-200 ${
+                    className={`font-sans text-base font-semibold leading-snug transition-colors duration-200 ${
                       isOpen ? 'text-primary' : 'text-dark-brown'
                     }`}
                   >
@@ -74,7 +74,7 @@ export default function FaqSection({ faqs }: { faqs: Faq[] }) {
                   }`}
                 >
                   <div className="px-6 pb-5 pt-1 border-t border-primary/10">
-                    <p className="text-sm text-muted-brown leading-relaxed">
+                    <p className="text-base text-muted-brown leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>

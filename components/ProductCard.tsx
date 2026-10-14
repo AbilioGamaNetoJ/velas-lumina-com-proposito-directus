@@ -45,13 +45,13 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Status pill badges */}
         <div className="absolute top-3.5 left-3.5 flex flex-col items-start gap-1.5">
           {product.featured && (
-            <div className="bg-primary text-white font-semibold text-[10px] tracking-widest uppercase px-2.5 py-1 rounded-md flex items-center gap-1 shadow-xs">
+            <div className="bg-primary text-white font-semibold text-xs tracking-widest uppercase px-2.5 py-1 rounded-md flex items-center gap-1 shadow-xs">
               <Flame className="w-3 h-3 fill-white" />
               Destaque
             </div>
           )}
           {soldOut && (
-            <div className="bg-dark-brown text-white font-semibold text-[10px] tracking-widest uppercase px-2.5 py-1 rounded-md flex items-center gap-1 shadow-xs">
+            <div className="bg-dark-brown text-white font-semibold text-xs tracking-widest uppercase px-2.5 py-1 rounded-md flex items-center gap-1 shadow-xs">
               <PackageX className="w-3 h-3" />
               Esgotado
             </div>
@@ -70,7 +70,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-6 md:p-8 flex flex-col flex-grow text-left">
 
         {/* Category Label */}
-        <span className="text-[9px] uppercase tracking-widest font-bold text-primary/70 mb-3 block">
+        <span className="text-xs uppercase tracking-widest font-bold text-primary mb-3 block">
           {product.category}
         </span>
 
@@ -84,7 +84,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Price */}
         <div className="text-primary font-medium text-base mb-3">
-          <FromPriceLabel className="text-xs" />{' '}
+          <FromPriceLabel className="text-sm" />{' '}
           R$ {getStartingPrice(product).toFixed(2)}
         </div>
 

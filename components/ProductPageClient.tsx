@@ -76,7 +76,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
         {/* Breadcrumbs */}
-        <nav className="flex text-xs text-muted-brown mb-8" aria-label="Breadcrumb">
+        <nav className="flex text-sm text-muted-brown mb-8" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
             <li className="inline-flex items-center">
               <Link href="/" className="hover:text-primary transition-colors">
@@ -101,7 +101,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
         </nav>
 
         {/* Back link */}
-        <Link href="/#produtos" className="inline-flex items-center text-xs font-semibold text-primary hover:text-dark-brown transition-colors mb-6 uppercase tracking-wider">
+        <Link href="/#produtos" className="inline-flex items-center text-sm font-semibold text-primary hover:text-dark-brown transition-colors mb-6 uppercase tracking-wider">
           <ArrowLeft className="w-4 h-4 mr-1" />
           Voltar para Catálogo
         </Link>
@@ -131,17 +131,17 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
           <div className="flex flex-col">
             {/* Category + status badges */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary/10 px-2.5 py-1 rounded-full inline-block w-fit">
+              <span className="text-xs uppercase font-bold tracking-widest text-primary bg-primary/10 px-2.5 py-1 rounded-full inline-block w-fit">
                 {product.category}
               </span>
               {product.featured && (
-                <span className="text-[10px] uppercase font-bold tracking-widest text-white bg-primary px-2.5 py-1 rounded-md flex items-center gap-1">
+                <span className="text-xs uppercase font-bold tracking-widest text-white bg-primary px-2.5 py-1 rounded-md flex items-center gap-1">
                   <Flame className="w-3 h-3 fill-white" />
                   Destaque
                 </span>
               )}
               {soldOut && (
-                <span className="text-[10px] uppercase font-bold tracking-widest text-white bg-dark-brown px-2.5 py-1 rounded-md flex items-center gap-1">
+                <span className="text-xs uppercase font-bold tracking-widest text-white bg-dark-brown px-2.5 py-1 rounded-md flex items-center gap-1">
                   <PackageX className="w-3 h-3" />
                   Esgotado
                 </span>
@@ -162,7 +162,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                   <span className="text-base font-normal text-muted-brown">Informe a quantidade desejada</span>
                 )}
               </p>
-              <p className="text-xs text-muted-brown mt-1">
+              <p className="text-sm text-muted-brown mt-1">
                 Valor inicial, que pode variar conforme sua encomenda. O valor final é confirmado pelo WhatsApp.
               </p>
             </div>
@@ -172,10 +172,10 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
             </div>
 
             <div className="mb-6">
-              <label htmlFor="quantity-select" className="text-xs uppercase tracking-wider font-bold text-dark-brown block">
+              <label htmlFor="quantity-select" className="text-sm uppercase tracking-wider font-bold text-dark-brown block">
                 Quantidade
               </label>
-              <p className="text-xs text-muted-brown mt-1 mb-3">
+              <p className="text-sm text-muted-brown mt-1 mb-3">
                 Quantidade mínima: <strong className="text-dark-brown">{formatUnits(minQuantity)}</strong>
               </p>
               <div className="relative w-full sm:max-w-md">
@@ -197,7 +197,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
 
               {isCustom && (
                 <div className="mt-3 w-full sm:max-w-md">
-                  <label htmlFor="custom-quantity" className="text-xs font-semibold text-dark-brown mb-1.5 block">
+                  <label htmlFor="custom-quantity" className="text-sm font-semibold text-dark-brown mb-1.5 block">
                     Quantas unidades você precisa?
                   </label>
                   <input
@@ -217,7 +217,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                   <p
                     id="custom-quantity-help"
                     role={customError ? 'alert' : undefined}
-                    className={`text-xs mt-1.5 ${customError ? 'text-red-600 font-semibold' : 'text-muted-brown'}`}
+                    className={`text-sm mt-1.5 ${customError ? 'text-red-600 font-semibold' : 'text-muted-brown'}`}
                   >
                     {customError ?? `Digite qualquer quantidade a partir de ${formatUnits(minQuantity)}.`}
                   </p>
@@ -233,7 +233,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                     href={notifyMeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2.5 bg-dark-brown hover:bg-dark-brown/90 text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-2.5 bg-dark-brown hover:bg-dark-brown/90 text-white font-bold text-sm tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                   >
                     <Bell className="w-4 h-4 shrink-0" />
                     <span>Avise-me</span>
@@ -242,7 +242,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                   <button
                     onClick={() => selectedQuantity && addToCart(product, selectedQuantity)}
                     disabled={!selectedQuantity}
-                    className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0"
+                    className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-sm tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0"
                   >
                     <ShoppingCart className="w-4 h-4 shrink-0" />
                     <span>Adicionar à Cesta</span>
@@ -254,7 +254,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                 </WhatsAppCTA>
               </div>
 
-              <p className="text-[10px] text-muted-brown mt-3">
+              <p className="text-sm text-muted-brown mt-3">
                 * As encomendas são personalizadas e finalizadas por WhatsApp. Clique em um dos botões acima para nos enviar uma mensagem.
               </p>
             </div>
@@ -270,7 +270,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
               </h2>
               <Link
                 href="/#produtos"
-                className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-dark transition-colors shrink-0"
+                className="hidden sm:inline-flex items-center gap-1 text-sm font-bold uppercase tracking-wider text-primary hover:text-primary-dark transition-colors shrink-0"
               >
                 Ver coleção completa
                 <ChevronRight className="w-3.5 h-3.5" />

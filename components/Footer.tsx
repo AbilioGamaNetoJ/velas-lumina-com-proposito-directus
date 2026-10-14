@@ -126,7 +126,7 @@ export default function Footer({ onGoToSection }: FooterProps) {
                   </div>
                   <div className="flex flex-col">
                     <span className="font-medium">WhatsApp</span>
-                    <span className="text-xs opacity-80">{waDisplay}</span>
+                    <span className="text-sm opacity-80">{waDisplay}</span>
                   </div>
                 </a>
               </li>
@@ -137,7 +137,7 @@ export default function Footer({ onGoToSection }: FooterProps) {
                   </div>
                   <div className="flex flex-col">
                     <span className="font-medium">E-mail</span>
-                    <span className="text-xs opacity-80">{settings.contact_email}</span>
+                    <span className="text-sm opacity-80">{settings.contact_email}</span>
                   </div>
                 </a>
               </li>
@@ -147,7 +147,7 @@ export default function Footer({ onGoToSection }: FooterProps) {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-medium text-dark-brown">Atelier</span>
-                  <span className="text-xs opacity-80">Rio Vermelho, Florianópolis, SC</span>
+                  <span className="text-sm opacity-80">Rio Vermelho, Florianópolis, SC</span>
                 </div>
               </li>
             </ul>
@@ -156,7 +156,7 @@ export default function Footer({ onGoToSection }: FooterProps) {
         </div>
 
         {/* Copyright banner */}
-        <div className="border-t border-high-blush/50 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-brown">
+        <div className="border-t border-high-blush/50 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-brown">
           <p>© {currentYear} {settings.footer_note}</p>
           <p className="flex items-center gap-1.5 font-medium tracking-wide">
             Feito com carinho e amor <Heart className="w-3.5 h-3.5 text-primary fill-primary" />
