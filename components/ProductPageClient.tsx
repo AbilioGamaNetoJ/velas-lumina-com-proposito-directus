@@ -12,6 +12,7 @@ import { ChevronRight, ChevronDown, ArrowLeft, Flame, ShoppingCart, Bell, Packag
 import { Product, QuantityOption } from '@/types/types';
 import { useCartContext } from '@/components/CartContext';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
+import { formatUnits, getMinQuantity, getQuantityOptions, resolveQuantityOption } from '@/lib/quantities';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -19,6 +20,8 @@ import CartDrawer from '@/components/CartDrawer';
 import ProductGallery from '@/components/ProductGallery';
 import WhatsAppCTA from '@/components/WhatsAppCTA';
 import ProductCard from '@/components/ProductCard';
+
+const CUSTOM_QUANTITY_KEY = 'personalizada';
 
 interface ProductPageClientProps {
   product: Product;
@@ -34,21 +37,32 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
   const allImages = [product.image, ...(product.gallery || [])];
   const notifyMeUrl = buildWhatsAppURL({ productName: product.name, notifyMe: true, number: settings.whatsapp_number });
 
-  const showQuantitySelector = !product.unitProduct && (product.quantityOptions?.length ?? 0) > 0;
-  const [selectedQuantity, setSelectedQuantity] = useState<QuantityOption | undefined>(
-    showQuantitySelector ? product.quantityOptions?.[0] : undefined
-  );
-  const displayPrice = selectedQuantity?.price ?? product.price;
+  const quantityOptions = getQuantityOptions(product);
+  const minQuantity = getMinQuantity(product);
+  const [selectedKey, setSelectedKey] = useState<string>(quantityOptions[0].quantity);
+  const [customInput, setCustomInput] = useState('');
+
+  const isCustom = selectedKey === CUSTOM_QUANTITY_KEY;
+  const hasCustomInput = customInput.trim() !== '';
+  const selectedQuantity: QuantityOption | null = isCustom
+    ? hasCustomInput ? resolveQuantityOption(product, Number(customInput)) : null
+    : quantityOptions.find((q) => q.quantity === selectedKey) ?? null;
+  const customError = isCustom && hasCustomInput && !selectedQuantity
+    ? Number.isInteger(Number(customInput))
+      ? `A quantidade mínima para este produto é de ${formatUnits(minQuantity)}.`
+      : 'Informe um número inteiro de unidades.'
+    : null;
 
   const specs: { label: string; value: string }[] = [
-    product.details?.dimensions ? { label: 'Dimensões:', value: product.details.dimensions } : null,
-    product.details?.weight ? { label: 'Peso:', value: product.details.weight } : null,
-    product.scents.length > 0 ? { label: 'Composição Aromática:', value: product.scents.join(', ') } : null,
+    product.details?.dimensions ? { label: 'Tamanho:', value: product.details.dimensions } : null,
+    product.details?.weight ? { label: 'Gramatura:', value: product.details.weight } : null,
+    product.details?.burnTime ? { label: 'Queima:', value: product.details.burnTime } : null,
+    { label: 'Aroma:', value: 'Personalizado' },
     product.productDescription ? { label: 'Descrição do Produto:', value: product.productDescription } : null,
   ].filter((s): s is { label: string; value: string } => s !== null);
 
   const whatsappMessage = selectedQuantity
-    ? `Olá! Tenho interesse no produto: *${product.name}* (${selectedQuantity.quantity} unidades - R$ ${selectedQuantity.price.toFixed(2)}). Poderia me dar mais informações?`
+    ? `Olá! Tenho interesse no produto: *${product.name}* (${formatUnits(selectedQuantity.quantity)} - a partir de R$ ${selectedQuantity.price.toFixed(2)}, valor sujeito a confirmação). Poderia me dar mais informações?`
     : undefined;
 
   const handleGoToSection = (id: string) => {
@@ -136,41 +150,81 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
             <h1 className="font-editorial text-4xl sm:text-5xl font-bold text-dark-brown mb-2 leading-tight">
               {product.name}
             </h1>
-            <p className="text-xl text-primary font-bold mb-6">
-              R$ {displayPrice.toFixed(2)}
-            </p>
+            <div className="mb-6">
+              <p className="text-xl text-primary font-bold">
+                {selectedQuantity ? (
+                  <>
+                    <span className="text-sm font-normal text-muted-brown">a partir de</span>{' '}
+                    R$ {selectedQuantity.price.toFixed(2)}
+                  </>
+                ) : (
+                  <span className="text-base font-normal text-muted-brown">Informe a quantidade desejada</span>
+                )}
+              </p>
+              <p className="text-xs text-muted-brown mt-1">
+                Valor inicial, que pode variar conforme sua encomenda. O valor final é confirmado pelo WhatsApp.
+              </p>
+            </div>
 
             <div className="prose prose-sm text-muted-brown mb-6 leading-relaxed">
               <p>{product.description}</p>
             </div>
 
-            {showQuantitySelector && (
-              <div className="mb-6">
-                <label htmlFor="quantity-select" className="text-xs uppercase tracking-wider font-bold text-dark-brown mb-3 block">
-                  Quantidade
-                </label>
-                <div className="relative w-full sm:w-64">
-                  <select
-                    id="quantity-select"
-                    value={selectedQuantity?.quantity}
-                    onChange={(e) => {
-                      const opt = product.quantityOptions?.find((q) => q.quantity === e.target.value);
-                      setSelectedQuantity(opt);
-                    }}
-                    className="w-full appearance-none bg-soft-blush border border-primary/15 text-dark-brown text-sm font-semibold rounded-xl px-4 py-3.5 pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  >
-                    {product.quantityOptions?.map((opt) => (
-                      <option key={opt.quantity} value={opt.quantity}>
-                        {opt.quantity} unidades — R$ {opt.price.toFixed(2)}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
-                </div>
+            <div className="mb-6">
+              <label htmlFor="quantity-select" className="text-xs uppercase tracking-wider font-bold text-dark-brown block">
+                Quantidade
+              </label>
+              <p className="text-xs text-muted-brown mt-1 mb-3">
+                Quantidade mínima: <strong className="text-dark-brown">{formatUnits(minQuantity)}</strong>
+              </p>
+              <div className="relative w-full sm:max-w-md">
+                <select
+                  id="quantity-select"
+                  value={selectedKey}
+                  onChange={(e) => setSelectedKey(e.target.value)}
+                  className="w-full appearance-none bg-soft-blush border border-primary/15 text-dark-brown text-sm font-semibold rounded-xl px-4 py-3.5 pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  {quantityOptions.map((opt) => (
+                    <option key={opt.quantity} value={opt.quantity}>
+                      {formatUnits(opt.quantity)} — a partir de R$ {opt.price.toFixed(2)}
+                    </option>
+                  ))}
+                  <option value={CUSTOM_QUANTITY_KEY}>Quantidade personalizada</option>
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
               </div>
-            )}
 
-            {/* CTA buttons placed immediately below Quantity (or Description if unit product) */}
+              {isCustom && (
+                <div className="mt-3 w-full sm:max-w-md">
+                  <label htmlFor="custom-quantity" className="text-xs font-semibold text-dark-brown mb-1.5 block">
+                    Quantas unidades você precisa?
+                  </label>
+                  <input
+                    id="custom-quantity"
+                    type="number"
+                    inputMode="numeric"
+                    min={minQuantity}
+                    step={1}
+                    autoFocus
+                    value={customInput}
+                    onChange={(e) => setCustomInput(e.target.value)}
+                    placeholder={`Mínimo ${minQuantity}`}
+                    aria-invalid={customError ? true : undefined}
+                    aria-describedby="custom-quantity-help"
+                    className={`w-full bg-soft-blush border text-dark-brown text-sm font-semibold rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 ${customError ? 'border-red-600 focus:ring-red-600/30' : 'border-primary/15 focus:ring-primary/40'}`}
+                  />
+                  <p
+                    id="custom-quantity-help"
+                    role={customError ? 'alert' : undefined}
+                    className={`text-xs mt-1.5 ${customError ? 'text-red-600 font-semibold' : 'text-muted-brown'}`}
+                  >
+                    {customError ?? `Digite qualquer quantidade a partir de ${formatUnits(minQuantity)}.`}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* CTA buttons placed immediately below Quantity */}
             <div className="mb-6">
               <div className="flex flex-col sm:flex-row gap-4">
                 {soldOut ? (
@@ -185,15 +239,16 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
                   </a>
                 ) : (
                   <button
-                    onClick={() => addToCart(product, selectedQuantity)}
-                    className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                    onClick={() => selectedQuantity && addToCart(product, selectedQuantity)}
+                    disabled={!selectedQuantity}
+                    className="flex-1 flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0"
                   >
                     <ShoppingCart className="w-4 h-4 shrink-0" />
                     <span>Adicionar à Cesta</span>
                   </button>
                 )}
 
-                <WhatsAppCTA productName={product.name} price={displayPrice} customMessage={whatsappMessage} className="flex-1">
+                <WhatsAppCTA productName={product.name} customMessage={whatsappMessage} disabled={!selectedQuantity} className="flex-1">
                   Orçar no WhatsApp
                 </WhatsAppCTA>
               </div>
@@ -223,7 +278,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
               {relatedProducts.map((related) => (
-                <ProductCard key={related.id} product={related} onAddToCart={addToCart} />
+                <ProductCard key={related.id} product={related} />
               ))}
             </div>
           </section>

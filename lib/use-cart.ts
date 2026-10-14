@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { CartItem, Product, QuantityOption } from '@/types/types';
+import { resolveQuantityOption } from '@/lib/quantities';
 
 const STORAGE_KEY = 'lumina-velas-cart';
 
@@ -34,10 +35,13 @@ export function useCart(products: Product[]) {
         const reconciled = parsed.map((item) => {
           const fresh = findLiveProduct(liveProducts, item);
           if (!fresh) return { ...item, unavailable: true };
-          const freshPrice = item.selectedQuantity
-            ? fresh.quantityOptions?.find((q) => q.quantity === item.selectedQuantity?.quantity)?.price ?? item.selectedQuantity.price
-            : fresh.price;
-          return { ...item, product: fresh, priceAtAddition: freshPrice, unavailable: false };
+          // Itens sem quantidade escolhida são compras avulsas de 1 unidade (anteriores à venda
+          // apenas por pacotes) — não têm mais como ser precificados, então ficam indisponíveis.
+          const option = item.selectedQuantity
+            ? resolveQuantityOption(fresh, Number(item.selectedQuantity.quantity))
+            : null;
+          if (!option) return { ...item, product: fresh, unavailable: true };
+          return { ...item, product: fresh, selectedQuantity: option, priceAtAddition: option.price, unavailable: false };
         });
         setCartItems(reconciled);
       }
@@ -61,10 +65,10 @@ export function useCart(products: Product[]) {
     }
   }, [cartItems]);
 
-  const addToCart = (product: Product, selectedQuantity?: QuantityOption) => {
+  const addToCart = (product: Product, selectedQuantity: QuantityOption) => {
     setCartItems((prev) => {
       const existing = prev.find(
-        (item) => item.product?.id === product.id && item.selectedQuantity?.quantity === selectedQuantity?.quantity
+        (item) => item.product?.id === product.id && item.selectedQuantity?.quantity === selectedQuantity.quantity
       );
       if (existing) {
         return prev.map((item) =>
@@ -74,10 +78,10 @@ export function useCart(products: Product[]) {
         );
       }
       return [...prev, {
-        id: `standard-${product.id}-${selectedQuantity?.quantity ?? 'base'}-${Date.now()}`,
+        id: `standard-${product.id}-${selectedQuantity.quantity}-${Date.now()}`,
         product,
         quantity: 1,
-        priceAtAddition: selectedQuantity?.price ?? product.price,
+        priceAtAddition: selectedQuantity.price,
         selectedQuantity,
       }];
     });

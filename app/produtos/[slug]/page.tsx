@@ -5,6 +5,7 @@ import { getProducts, getProductBySlug } from '@/lib/directus/get-products';
 import { getSiteSettings } from '@/lib/directus/get-site-settings';
 import { SiteSettingsProvider } from '@/components/SiteSettingsContext';
 import ProductPageClient from '@/components/ProductPageClient';
+import { getQuantityOptions, getStartingPrice } from '@/lib/quantities';
 
 export const revalidate = 3600;
 
@@ -74,6 +75,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const relatedProducts = [...sameCategory, ...otherProducts].slice(0, 4);
 
   const productUrl = `${SITE_URL}/produtos/${product.id}`;
+  const quantityOptions = getQuantityOptions(product);
 
   const productJsonLd = {
     '@context': 'https://schema.org',
@@ -86,8 +88,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
       name: settings.brand_name,
     },
     offers: {
-      '@type': 'Offer',
-      price: product.price.toFixed(2),
+      '@type': 'AggregateOffer',
+      lowPrice: getStartingPrice(product).toFixed(2),
+      highPrice: Math.max(...quantityOptions.map((o) => o.price)).toFixed(2),
+      offerCount: quantityOptions.length,
       priceCurrency: 'BRL',
       availability: product.inStock === false
         ? 'https://schema.org/OutOfStock'

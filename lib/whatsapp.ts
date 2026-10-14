@@ -20,7 +20,7 @@ export function buildWhatsAppURL(params?: WhatsAppMessageParams): string {
   } else if (params?.notifyMe && params?.productName) {
     message = `Olá! Gostaria de ser avisado(a) quando o produto *${params.productName}* estiver disponível novamente.`;
   } else if (params?.productName && params?.price) {
-    message = `Olá! Tenho interesse no produto: *${params.productName}* (R$ ${params.price.toFixed(2)}). Poderia me dar mais informações?`;
+    message = `Olá! Tenho interesse no produto: *${params.productName}* (a partir de R$ ${params.price.toFixed(2)}, valor sujeito a confirmação). Poderia me dar mais informações?`;
   }
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
@@ -46,11 +46,12 @@ export function buildCartOrderMessage(brandName: string, items: CartOrderItem[])
     if (item.quantityLabel) {
       message += `   - Opção: ${item.quantityLabel}\n`;
     }
-    message += `   - Qtd: ${item.quantity}x de R$ ${item.price.toFixed(2)}\n\n`;
+    message += `   - Qtd: ${item.quantity}x, a partir de R$ ${item.price.toFixed(2)} cada\n\n`;
   });
 
   message += `---------------------------------\n`;
-  message += `*Valor Total Estimado: R$ ${subtotal.toFixed(2)}*`;
+  message += `*Valor Total Estimado: a partir de R$ ${subtotal.toFixed(2)}*\n`;
+  message += `_Os valores acima são "a partir de" e podem não ser o valor final. O valor definitivo será confirmado no atendimento._`;
 
   return message;
 }

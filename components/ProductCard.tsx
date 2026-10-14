@@ -4,18 +4,18 @@
  */
 
 import React from 'react';
-import { ShoppingBag, Eye, Flame, PackageX, Bell } from 'lucide-react';
+import { ArrowRight, Eye, Flame, PackageX, Bell } from 'lucide-react';
 import { Product } from '@/types/types';
 import Link from 'next/link';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
+import { getStartingPrice } from '@/lib/quantities';
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product) => void;
 }
 
-export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const settings = useSiteSettings();
   const soldOut = product.inStock === false;
   const notifyMeUrl = buildWhatsAppURL({ productName: product.name, notifyMe: true, number: settings.whatsapp_number });
@@ -83,7 +83,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
         {/* Price */}
         <div className="text-primary font-medium text-base mb-3">
-          R$ {product.price.toFixed(2)}
+          <span className="text-xs font-normal text-muted-brown">a partir de</span>{' '}
+          R$ {getStartingPrice(product).toFixed(2)}
         </div>
 
         {/* Subtitle / Essence */}
@@ -103,13 +104,13 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
             Avise-me
           </a>
         ) : (
-          <button
-            onClick={() => onAddToCart(product)}
+          <Link
+            href={`/produtos/${product.id}`}
             className="w-full flex items-center justify-center gap-2 border border-primary/20 hover:border-primary text-primary hover:bg-primary hover:text-white px-4 py-3 rounded-xl text-xs font-bold tracking-widest uppercase transition-all duration-300 cursor-pointer"
           >
-            <ShoppingBag className="w-4 h-4" />
-            Adicionar
-          </button>
+            Escolher Quantidade
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         )}
       </div>
     </div>

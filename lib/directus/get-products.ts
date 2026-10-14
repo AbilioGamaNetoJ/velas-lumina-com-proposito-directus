@@ -1,10 +1,50 @@
 import { readItems } from '@directus/sdk';
 import { directus, fileUrl } from '@/lib/directus';
 import { PRODUCTS as localProducts } from '@/lib/data';
-import { Product } from '@/types/types';
+import { Product, QuantityOption } from '@/types/types';
+import { DEFAULT_MIN_QUANTITY, priceForQuantity } from '@/lib/quantities';
+
+// Valor da opção "Valor personalizado" no campo `quantidades` (repeater) do Directus.
+const CUSTOM_QUANTITY_CHOICE = 'personalizado';
+
+interface QuantityRow {
+  quantidade?: string | null;
+  quantidade_personalizada?: number | null;
+  preco?: number | null;
+}
+
+// Converte as linhas do repeater `quantidades` em opções de compra, ordenadas da menor para a maior.
+// Linhas "Valor personalizado" abaixo da quantidade mínima do produto são descartadas.
+function mapQuantityOptions(
+  rows: QuantityRow[] | null | undefined,
+  unitPrice: number,
+  minQuantity: number,
+  slug: string
+): QuantityOption[] {
+  const byQuantity = new Map<number, QuantityOption>();
+
+  for (const row of rows ?? []) {
+    const isCustom = row.quantidade === CUSTOM_QUANTITY_CHOICE;
+    const quantity = Number(isCustom ? row.quantidade_personalizada : row.quantidade);
+    if (!Number.isInteger(quantity) || quantity < 1) continue;
+
+    if (isCustom && quantity < minQuantity) {
+      console.warn(`Produto "${slug}": quantidade personalizada ${quantity} ignorada (mínimo é ${minQuantity}).`);
+      continue;
+    }
+    if (byQuantity.has(quantity)) continue;
+
+    const price = row.preco != null && row.preco > 0 ? Number(row.preco) : priceForQuantity(unitPrice, quantity);
+    byQuantity.set(quantity, { quantity: String(quantity), price });
+  }
+
+  return [...byQuantity.values()].sort((a, b) => Number(a.quantity) - Number(b.quantity));
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapItem(p: any): Product {
+  const minQuantity = p.quantidade_minima > 0 ? Number(p.quantidade_minima) : DEFAULT_MIN_QUANTITY;
+
   return {
     id: p.slug,
     directusId: p.id,
@@ -12,7 +52,6 @@ function mapItem(p: any): Product {
     subtitle: p.descricao ?? '',
     description: p.descricao_detalhada ?? '',
     productDescription: p.descricao_produto ?? undefined,
-    scents: p.aromas ?? [],
     price: p.preco,
     image: fileUrl(p.imagem),
     gallery: (p.imagens ?? []).map((g: { directus_files_id: string }) =>
@@ -24,13 +63,10 @@ function mapItem(p: any): Product {
     details: {
       weight: p.peso ?? undefined,
       dimensions: p.dimensoes ?? undefined,
+      burnTime: p.tempo_queima ?? undefined,
     },
-    quantityOptions: (p.quantidades ?? []).map((q: { quantidade: string; preco: number | null }) => {
-      const quantity = String(q.quantidade);
-      const price = q.preco != null && q.preco > 0 ? Number(q.preco) : Number(q.quantidade) * p.preco;
-      return { quantity, price };
-    }),
-    unitProduct: p.produto_unitario ?? false,
+    quantityOptions: mapQuantityOptions(p.quantidades, p.preco, minQuantity, p.slug),
+    minQuantity,
   };
 }
 
@@ -46,13 +82,13 @@ const PRODUCT_FIELDS = [
   'destaque',
   'ativo',
   'sem_estoque',
-  'aromas',
   'peso',
   'dimensoes',
+  'tempo_queima',
   'imagem',
   'imagens.directus_files_id',
-  'produto_unitario',
   'quantidades',
+  'quantidade_minima',
 ] as const;
 
 export async function getProducts(): Promise<Product[]> {

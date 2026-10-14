@@ -15,7 +15,6 @@ export interface Product {
   subtitle: string;
   description: string;
   productDescription?: string;
-  scents: string[];
   price: number;
   image: string;
   gallery?: string[];
@@ -23,9 +22,10 @@ export interface Product {
   details?: {
     weight?: string;
     dimensions?: string;
+    burnTime?: string;
   };
   quantityOptions?: QuantityOption[];
-  unitProduct?: boolean;
+  minQuantity?: number;
   featured?: boolean;
   inStock?: boolean;
 }

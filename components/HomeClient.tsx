@@ -19,6 +19,7 @@ import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
 import { useCartContext } from '@/components/CartContext';
 import { Product, Category, Faq } from '@/types/types';
+import { getStartingPrice } from '@/lib/quantities';
 import { Search, AlertCircle, ArrowRight, X } from 'lucide-react';
 
 export default function HomeClient({
@@ -36,7 +37,7 @@ export default function HomeClient({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const { cartItems, addToCart, updateQuantity, removeItem, cartCount, isCartOpen, openCart, closeCart } = useCartContext();
+  const { cartItems, updateQuantity, removeItem, cartCount, isCartOpen, openCart, closeCart } = useCartContext();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -77,8 +78,7 @@ export default function HomeClient({
     const matchesCategory = activeCategory === 'todas' || p.category === activeCategory;
     const matchesSearch = 
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.scents.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()));
+      p.subtitle.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesCategory && matchesSearch;
   });
@@ -86,8 +86,7 @@ export default function HomeClient({
   const searchResults = searchQuery.trim()
     ? products.filter((p) =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.scents.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
+        p.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
       ).slice(0, 5)
     : [];
 
@@ -108,10 +107,7 @@ export default function HomeClient({
         <Hero onExplore={() => handleGoToSection('produtos')} />
 
         {/* Dynamic Featured Section (products with featured: true) */}
-        <FeaturedSection
-          featuredProducts={products.filter(p => p.featured)}
-          onAddToCart={addToCart}
-        />
+        <FeaturedSection featuredProducts={products.filter(p => p.featured)} />
 
         {/* Collection Section */}
         <section id="produtos" className="py-20 bg-white relative">
@@ -206,8 +202,9 @@ export default function HomeClient({
                                 {product.subtitle || product.category}
                               </p>
                             </div>
-                            <span className="text-xs font-bold text-primary shrink-0">
-                              R$ {product.price.toFixed(2)}
+                            <span className="text-xs font-bold text-primary shrink-0 text-right">
+                              <span className="block text-[10px] font-normal text-muted-brown">a partir de</span>
+                              R$ {getStartingPrice(product).toFixed(2)}
                             </span>
                           </Link>
                         ))}
@@ -245,10 +242,7 @@ export default function HomeClient({
               <ProductCarousel>
                   {filteredProducts.map((prod) => (
                     <div className="h-full" key={prod.id}>
-                      <ProductCard
-                        product={prod}
-                        onAddToCart={addToCart}
-                      />
+                      <ProductCard product={prod} />
                     </div>
                   ))}
               </ProductCarousel>

@@ -8,6 +8,7 @@ interface WhatsAppCTAProps {
   productName?: string;
   price?: number;
   customMessage?: string;
+  disabled?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -20,16 +21,17 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-export default function WhatsAppCTA({ productName, price, customMessage, className = '', children }: WhatsAppCTAProps) {
+export default function WhatsAppCTA({ productName, price, customMessage, disabled = false, className = '', children }: WhatsAppCTAProps) {
   const settings = useSiteSettings();
   const href = buildWhatsAppURL({ productName, price, customMessage, number: settings.whatsapp_number, defaultMessage: settings.whatsapp_default_message });
 
   return (
     <a
-      href={href}
+      href={disabled ? undefined : href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer ${className}`}
+      aria-disabled={disabled || undefined}
+      className={`inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs tracking-widest uppercase py-4 px-4 rounded-full shadow-ambient hover:shadow-ambient-hover transform hover:-translate-y-0.5 transition-all duration-300 cursor-pointer ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`}
     >
       <WhatsAppIcon className="w-4 h-4 shrink-0" />
       <span>{children || 'Fale com a Gente'}</span>

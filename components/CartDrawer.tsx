@@ -16,6 +16,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 import { CartItem } from '@/types/types';
 import { buildWhatsAppURL, buildCartOrderMessage } from '@/lib/whatsapp';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
+import { formatUnits } from '@/lib/quantities';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -40,7 +41,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
         category: item.product.category,
         quantity: item.quantity,
         price: item.priceAtAddition,
-        quantityLabel: item.selectedQuantity ? `${item.selectedQuantity.quantity} unidades` : undefined,
+        quantityLabel: item.selectedQuantity ? formatUnits(item.selectedQuantity.quantity) : undefined,
       }))
     );
 
@@ -142,7 +143,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                             ) : (
                               <p className="text-[10px] uppercase tracking-wider font-bold text-primary mt-0.5">
                                 {item.product.category}
-                                {item.selectedQuantity && ` • ${item.selectedQuantity.quantity} unidades`}
+                                {item.selectedQuantity && ` • ${formatUnits(item.selectedQuantity.quantity)}`}
                               </p>
                             )}
                           </div>
@@ -169,7 +170,8 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                               </button>
                             </div>
 
-                            <span className="font-semibold text-primary text-sm">
+                            <span className="font-semibold text-primary text-sm text-right">
+                              <span className="block text-[10px] font-normal text-muted-brown">a partir de</span>
                               R$ {(item.priceAtAddition * item.quantity).toFixed(2)}
                             </span>
                           </div>
@@ -188,10 +190,11 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                 <div className="p-6 bg-white border-t border-high-blush/35 space-y-4">
                   <div className="flex justify-between items-center text-left">
                     <div>
-                      <p className="font-editorial text-lg font-bold text-dark-brown">Valor Total</p>
+                      <p className="font-editorial text-lg font-bold text-dark-brown">Valor Total Estimado</p>
                       <p className="text-xs text-muted-brown">Entrega combinada via WhatsApp</p>
                     </div>
-                    <p className="font-sans text-2xl font-bold tracking-tight text-primary">
+                    <p className="font-sans text-2xl font-bold tracking-tight text-primary text-right">
+                      <span className="block text-xs font-normal tracking-normal text-muted-brown">a partir de</span>
                       R$ {subtotal.toFixed(2)}
                     </p>
                   </div>
@@ -205,6 +208,10 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                     <WhatsAppIcon className="w-4 h-4" />
                     Enviar Pedido via WhatsApp
                   </button>
+
+                  <p className="text-xs text-center text-dark-brown font-semibold leading-normal">
+                    Os valores são &quot;a partir de&quot; e podem não ser o valor final. O valor definitivo é confirmado no atendimento pelo WhatsApp.
+                  </p>
 
                   <p className="text-[10px] text-center text-muted-brown leading-normal">
                     Não há pagamento online nessa versão do site. Ao clicar no botão, uma mensagem organizada com a descrição das suas velas será aberta no WhatsApp para concluir seu pedido.
