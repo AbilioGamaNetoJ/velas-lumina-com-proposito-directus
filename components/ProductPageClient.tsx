@@ -20,6 +20,7 @@ import CartDrawer from '@/components/CartDrawer';
 import ProductGallery from '@/components/ProductGallery';
 import WhatsAppCTA from '@/components/WhatsAppCTA';
 import ProductCard from '@/components/ProductCard';
+import FromPriceLabel from '@/components/FromPriceLabel';
 
 const CUSTOM_QUANTITY_KEY = 'personalizada';
 
@@ -154,7 +155,7 @@ export default function ProductPageClient({ product, relatedProducts = [] }: Pro
               <p className="text-xl text-primary font-bold">
                 {selectedQuantity ? (
                   <>
-                    <span className="text-sm font-normal text-muted-brown">a partir de</span>{' '}
+                    <FromPriceLabel className="text-sm" />{' '}
                     R$ {selectedQuantity.price.toFixed(2)}
                   </>
                 ) : (

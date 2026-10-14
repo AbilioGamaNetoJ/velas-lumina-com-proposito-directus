@@ -17,6 +17,7 @@ import { CartItem } from '@/types/types';
 import { buildWhatsAppURL, buildCartOrderMessage } from '@/lib/whatsapp';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
 import { formatUnits } from '@/lib/quantities';
+import FromPriceLabel from '@/components/FromPriceLabel';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -171,7 +172,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                             </div>
 
                             <span className="font-semibold text-primary text-sm text-right">
-                              <span className="block text-[10px] font-normal text-muted-brown">a partir de</span>
+                              <FromPriceLabel className="block text-[10px]" />
                               R$ {(item.priceAtAddition * item.quantity).toFixed(2)}
                             </span>
                           </div>
@@ -194,7 +195,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
                       <p className="text-xs text-muted-brown">Entrega combinada via WhatsApp</p>
                     </div>
                     <p className="font-sans text-2xl font-bold tracking-tight text-primary text-right">
-                      <span className="block text-xs font-normal tracking-normal text-muted-brown">a partir de</span>
+                      <FromPriceLabel className="block text-xs tracking-normal" />
                       R$ {subtotal.toFixed(2)}
                     </p>
                   </div>

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { buildWhatsAppURL } from '@/lib/whatsapp';
 import { useSiteSettings } from '@/components/SiteSettingsContext';
 import { getStartingPrice } from '@/lib/quantities';
+import FromPriceLabel from '@/components/FromPriceLabel';
 
 interface ProductCardProps {
   product: Product;
@@ -83,7 +84,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Price */}
         <div className="text-primary font-medium text-base mb-3">
-          <span className="text-xs font-normal text-muted-brown">a partir de</span>{' '}
+          <FromPriceLabel className="text-xs" />{' '}
           R$ {getStartingPrice(product).toFixed(2)}
         </div>
 
