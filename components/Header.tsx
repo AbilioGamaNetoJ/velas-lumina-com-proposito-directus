@@ -32,7 +32,7 @@ export default function Header({ cartCount, onOpenCart, onGoToSection }: HeaderP
   return (
     <>
       <header id="app-header" className="fixed top-0 left-0 right-0 z-50 bg-warm-bg/85 backdrop-blur-md border-b border-high-blush/40 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo / Brand */}

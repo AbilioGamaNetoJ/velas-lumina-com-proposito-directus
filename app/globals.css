@@ -12,6 +12,9 @@
   --color-accent-gold: #cca72f;
   --color-soft-blush: #fff1ea;
   --color-high-blush: #fbe4d7;
+
+  /* Largura máxima do conteúdo (Tailwind gera `max-w-page`) — 1680px */
+  --container-page: 105rem;
 }
 
 body {

@@ -45,7 +45,7 @@ export default function HowItWorks() {
     <section id="como-funciona" className="py-20 bg-warm-bg border-t border-high-blush/30 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-soft-blush rounded-full blur-[140px] opacity-50 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Header */}
         <ScrollReveal delay={100} className="text-center max-w-2xl mx-auto mb-16">

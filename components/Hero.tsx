@@ -19,7 +19,7 @@ export default function Hero({ onExplore }: HeroProps) {
       <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-b from-soft-blush/30 to-transparent rounded-bl-full pointer-events-none opacity-50" />
       <div className="absolute top-[20%] left-[-10%] w-[50%] h-[50%] bg-soft-blush rounded-full blur-[140px] opacity-40 pointer-events-none" />
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-full max-w-page mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           
           {/* Text block (Overlapping z-index 20) */}
